@@ -1,0 +1,8 @@
+<div class="field">
+  <input type="text" [(ngModel)]="text" (input)="addState(state)">
+  <fa-icon
+    [icon]="faTimesCircle"
+    [styles]="{'color': 'red'}"
+    (click)="deleteState(state)"
+  ></fa-icon>
+</div>

@@ -1,0 +1,29 @@
+<div class="header">
+  <h2>Inputs</h2>
+</div>
+
+<div class="section">
+  <h3>States</h3>
+  <button class="button" (click)="onNewStateClick()">Add</button>
+</div>
+
+<div class="form-control">
+  <app-inputfield 
+    *ngFor="let state of states"
+    [state]="state"
+    (addStateEvent)="onAddState($event)"
+    (deleteStateEvent)="onDeleteState($event)"
+  ></app-inputfield>
+</div>
+
+<div class="section">
+  <h3>Transitions</h3>
+  <button class="button" (click)="onNewTransitionClick()">Add</button>
+</div>
+
+<div class="form-control">
+  <app-inputfield 
+    *ngFor="let transition of transitions"
+    [transition]="transition"
+  ></app-inputfield>
+</div>
