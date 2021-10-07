@@ -11,19 +11,19 @@ body {
   font-family: "Poppins", sans-serif; 
 }
 
+.field {
+  display: flex;
+  align-items: baseline;
+}
+
 .form-control {
-  margin: 20px 0;
+  margin: 10px 0;
 }
 
-.form-control label {
-  display: block;
-}
-
-.form-control input {
+.form-control input, .form-control select{
   width: 100%;
   height: 40px;
-  margin: 5px;
+  margin: 6px;
   padding: 3px 7px;
-  font-size: 17px;
+  font-size: 16px;
 }
-

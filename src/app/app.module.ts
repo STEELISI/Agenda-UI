@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { LeftComponent } from './components/left/left.component';
 import { RightComponent } from './components/right/right.component';
 import { InputfieldComponent } from './components/inputfield/inputfield.component';
+import { DropdownfieldComponent } from './components/dropdownfield/dropdownfield.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { InputfieldComponent } from './components/inputfield/inputfield.componen
     LeftComponent,
     RightComponent,
     InputfieldComponent,
+    DropdownfieldComponent,
   ],
   imports: [
     BrowserModule,
