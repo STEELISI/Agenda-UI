@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { State } from '../../State';
 import { Transition } from '../../Transition';
+import { STATES } from '../../mock-states';
+import { TRANSITIONS } from '../../mock-transitions';
 
 @Component({
   selector: 'app-left',
@@ -9,33 +11,62 @@ import { Transition } from '../../Transition';
   styleUrls: ['./left.component.css']
 })
 export class LeftComponent implements OnInit {
-  states: State[] = [];
-  transitions: Transition[] = [];
+  states: State[] = STATES;
+  transitions: Transition[] = TRANSITIONS;
+
+  stateID = 0;
+  transitionID = 0;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  onNewStateClick(): void {
-    this.states.push({  id: this.states.length,
+  onAddState(): void {
+    this.states.push({  id: this.stateID,
                         text: ''  });
+    this.stateID += 1;
   }
 
-  onAddState($event: State): void {
-    this.states[$event.id].text = $event.text;
+  onUpdateState($event: State): void {
+    const index = this.states.findIndex((st) => st.id == $event.id);
 
-    /* console.log(this.states); */
+    this.states[index] = $event;
   }
 
   onDeleteState($event: State): void {
-    this.states = this.states.filter((st) => st.id != $event.id)
+    const index = this.states.findIndex((st) => st.id == $event.id);
+
+    if (this.states.length > 1) 
+      this.states.splice(index, 1);
+    else 
+      this.states.splice(index);
     
-    console.log(this.states);
+    console.log(STATES);
   }
 
-  onNewTransitionClick(): void {
-    this.transitions.push({   from: { id: -1, text: ''  },
-                              to:   { id: -2, text: ''  }});
+  onAddTransition(): void {
+    this.transitions.push({   id: this.transitionID,
+                              from: { id: 1, text: '---'  },
+                              to:   { id: 2, text: '---'  }});
+    this.transitionID += 1;
   }
+
+  onUpdateTransition($event: Transition): void {
+    const index = this.transitions.findIndex((ts) => ts.id == $event.id);
+
+    this.transitions[index] = $event; 
+  }
+
+  onDeleteTransition($event: Transition): void {
+    const index = this.transitions.findIndex((ts) => ts.id == $event.id);
+
+    if (this.transitions.length > 1) 
+      this.transitions.splice(index, 1);
+    else 
+      this.transitions.splice(index);
+    
+    console.log(TRANSITIONS);
+  }
+
 }

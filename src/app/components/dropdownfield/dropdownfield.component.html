@@ -1,0 +1,22 @@
+<div class="field form-control">
+  <select [(ngModel)]="from" (change)="updateFromState(transition)">
+    <option disabled selected value>
+    FROM</option>
+    <option 
+      *ngFor="let state of states" 
+      [value]="state.text"
+    >{{ state.text }}</option>
+  </select>
+  <select [(ngModel)]="to" (change)="updateToState(transition)">
+    <option disabled selected value>TO</option>
+    <option 
+      *ngFor="let state of states" 
+      [value]="state.text"
+    >{{ state.text }}</option>
+  </select>
+  <fa-icon
+    [icon]="faTimesCircle"
+    [styles]="{'color': 'red'}"
+    (click)="deleteTransition(transition)"
+  ></fa-icon>
+</div>
