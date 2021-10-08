@@ -1,7 +1,7 @@
 import { State } from './State';
 
 export interface Transition {
-  id: number;
+  id: string;
   from: State;
   to: State;
 }

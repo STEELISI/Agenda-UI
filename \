@@ -1,0 +1,78 @@
+<ngx-graph
+  [autoCenter]="true"
+  [links]="[
+    {
+      id: 'a',
+      source: 'first',
+    target: 'second',
+      label: 'is parent of'
+    }, {
+      id: 'b',
+      source: 'first',
+      target: 'third',
+      label: 'custom label'
+    }
+  ]"
+  [nodes]="[
+    {
+      id: 'first',
+      label: 'A'
+    }, {
+      id: 'second',
+      label: 'B'
+    }, {
+      id: 'third',
+      label: 'C'
+    }
+  ]"
+  layout="dagre">
+
+<ng-template #defsTemplate>
+  <svg:marker 
+    id="arrow" 
+    viewBox="0 -5 10 10" 
+    refX="8" 
+    refY="0" 
+    markerWidth="6" 
+    markerHeight="6" 
+    orient="auto">
+    <svg:path 
+      d="M0,-5L10,0L0,5" 
+      fill="#666666"
+      class="arrow-head" />
+  </svg:marker>
+</ng-template>
+
+<ng-template #nodeTemplate let-node>
+  <svg:g class="node">
+    <svg:circle 
+      [attr.cx]="20" 
+      [attr.cy]="15" 
+      [attr.r]="15" 
+      fill="black" />
+    <svg:text 
+      alignment-baseline="central" 
+      [attr.x]="10" 
+      [attr.y]="10">
+        {{node.label}}
+    </svg:text>
+  </svg:g>
+</ng-template>
+
+
+<ng-template #linkTemplate let-link>
+  <svg:g class="edge">
+    <svg:path 
+      class="line" 
+      stroke-width="3" 
+      marker-end="url(#arrow)">
+    </svg:path>
+  </svg:g>
+</ng-template>
+
+
+
+
+
+
+</ngx-graph>

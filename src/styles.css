@@ -11,6 +11,10 @@ body {
   font-family: "Poppins", sans-serif; 
 }
 
+.header {
+  margin-bottom: 30px;
+}
+
 .field {
   display: flex;
   align-items: baseline;

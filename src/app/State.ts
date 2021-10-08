@@ -1,4 +1,4 @@
 export interface State {
-  id: number;
+  id: string;
   text: string;
 }

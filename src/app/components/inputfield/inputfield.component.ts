@@ -9,7 +9,7 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./inputfield.component.css']
 })
 export class InputfieldComponent implements OnInit {
-  @Input() state: State = {id: -1, text: ''};
+  @Input() state: State = {id: "id", text: ''};
   @Output() updateStateEvent: EventEmitter<State> = new EventEmitter();
   @Output() deleteStateEvent: EventEmitter<State> = new EventEmitter();
 
