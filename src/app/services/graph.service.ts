@@ -16,7 +16,7 @@ export class GraphService {
 
   setNodes(states: State[]): void {
     let nodes: Node[] = [];
-    states.forEach((st) => nodes.push({ id: st.id.toString(), label: st.text }));
+    states.forEach((st) => nodes.push({ id: st.id.toString(), label: st.name }));
 
     this.nodeSubject.next(nodes);
   }

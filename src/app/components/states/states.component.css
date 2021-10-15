@@ -1,0 +1,35 @@
+.form-control input[name="name"] {
+  width: 20%;
+  height: 40px;
+  margin: 6px;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+
+.form-control input[name="description"] {
+  width: 50%;
+  height: 40px;
+  margin: 6px;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+
+.form-control .checkbox[name="start"]{
+  width: 10%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.form-control .checkbox[name="terminus"]{
+  width: 15%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.form-control .checkbox label {
+  margin-right: 5px;
+  font-size: 12px;
+}
+

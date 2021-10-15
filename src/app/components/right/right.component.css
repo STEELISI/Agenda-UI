@@ -1,0 +1,26 @@
+.save {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  margin-top: 25px;
+}
+
+.save-button {
+  background-color: #e7e7e7; /* Gray */
+  border: 2px solid grey;
+  border-radius: 12px;
+  color: black;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 2px 1px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #bebebe;
+  color: black;
+}

@@ -24,16 +24,7 @@ export class RightComponent implements OnInit {
   }
 
   onUpdateEdge(edges: Edge[]): void {
-    if (!edges.length) {
-      return;
-    }
-
-    if (edges.findIndex((e) => (e.source == 'from' || e.target == 'to')) != -1) {
-      return;
-    }
-      
     this.links = edges;
-    console.log(this.links);
   }
 
 }

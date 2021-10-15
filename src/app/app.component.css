@@ -3,9 +3,14 @@
   justify-content: space-between;
 }
 
-.container div {
-  width: 100%;
+.container .left {
+  width: 60%;
   padding: 15px;
   border: 1px solid black;
 }
 
+.container .right {
+  width: 40%;
+  padding: 15px;
+  border: 1px solid black;
+}

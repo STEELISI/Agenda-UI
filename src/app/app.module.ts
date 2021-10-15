@@ -9,8 +9,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LeftComponent } from './components/left/left.component';
 import { RightComponent } from './components/right/right.component';
-import { InputfieldComponent } from './components/inputfield/inputfield.component';
-import { DropdownfieldComponent } from './components/dropdownfield/dropdownfield.component';
+import { StatesComponent } from './components/states/states.component';
+import { TransitionsComponent } from './components/transitions/transitions.component';
 import { DrawingboardComponent } from './components/drawingboard/drawingboard.component';
 
 @NgModule({
@@ -18,8 +18,8 @@ import { DrawingboardComponent } from './components/drawingboard/drawingboard.co
     AppComponent,
     LeftComponent,
     RightComponent,
-    InputfieldComponent,
-    DropdownfieldComponent,
+    StatesComponent,
+    TransitionsComponent,
     DrawingboardComponent,
   ],
   imports: [

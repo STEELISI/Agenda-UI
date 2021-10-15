@@ -1,4 +1,7 @@
 export interface State {
   id: string;
-  text: string;
+  name: string;
+  description: string;
+  start: boolean;
+  terminus: boolean;
 }

@@ -1,0 +1,33 @@
+<div class="field form-control">
+  <input 
+    type="text"
+    name="name"
+    [(ngModel)]="name" 
+    (input)="updateName(state)" 
+    placeholder="Name" />
+  <input 
+    type="text" 
+    name="description" 
+    [(ngModel)]="description"
+    (input)="updateDescription(state)"
+    placeholder="Description"/>
+  <div class="checkbox" name="start">
+    <label>Start</label>
+    <input 
+      type="checkbox" 
+      [(ngModel)]="start"
+      (change)="updateStart(state)" />
+  </div>
+  <div class="checkbox" name="terminus">
+    <label>Terminus</label>
+    <input 
+      type="checkbox" 
+      [(ngModel)]="terminus"
+      (change)="updateTerminus(state)" />
+  </div>
+  <fa-icon
+    [icon]="faTimesCircle"
+    [styles]="{'color': 'red', 'font-size': '16px', 'margin-right': '9px'}"
+    (click)="deleteState(state)"
+  ></fa-icon>
+</div>

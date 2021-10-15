@@ -27,14 +27,17 @@ export class LeftComponent implements OnInit {
 
   onAddState(): void {
     this.states.push({  id: generateID(),
-                        text: ''  });
+                        name: '',
+                        description: '',
+                        start: false,
+                        terminus: false
+    });
   }
 
   onUpdateState($event: State): void {
     const index = this.states.findIndex((st) => st.id == $event.id);
 
     this.states[index] = $event;
-    this.graphService.setNodes(this.states);
   }
 
   onDeleteState($event: State): void {
@@ -44,22 +47,44 @@ export class LeftComponent implements OnInit {
       this.states.splice(index, 1);
     else 
       this.states.splice(index);
-    
-    this.graphService.setNodes(this.states);
+
+    /* remove all transitions from/to the deleted state */
+    for (var i = this.transitions.length - 1; i >= 0; i--) {
+      if (this.transitions[i].from.id == $event.id || this.transitions[i].to.id == $event.id) {
+        if (this.transitions.length > 1 )
+          this.transitions.splice(i, 1);
+        else
+          this.transitions.splice(i);
+      }
+    }
+
     console.log(STATES);
+    console.log(TRANSITIONS);
   }
 
   onAddTransition(): void {
     this.transitions.push({   id: generateID(),
-                              from: { id: "from", text: '---'  },
-                              to:   { id: "to", text: '---'  }});
+                              from: { id: "from", 
+                                      name: '---',
+                                      description: '',
+                                      start: false,
+                                      terminus: false
+                              },
+                              to:   { id: "to", 
+                                      name: '---',
+                                      description: '',
+                                      start: false,
+                                      terminus: false
+                              },
+                              trigger: '',
+                              description: ''
+    });
   }
 
   onUpdateTransition($event: Transition): void {
     const index = this.transitions.findIndex((ts) => ts.id == $event.id);
 
     this.transitions[index] = $event; 
-    this.graphService.setEdges(this.transitions);
   }
 
   onDeleteTransition($event: Transition): void {
@@ -70,8 +95,39 @@ export class LeftComponent implements OnInit {
     else 
       this.transitions.splice(index);
     
-    this.graphService.setEdges(this.transitions);
     console.log(TRANSITIONS);
   }
 
+  onDrawGraph(): void {
+    /* === check whether inputs are wrong-format === */
+
+    /* check if both states and transitions are empty */
+    if (this.states.length == 0 && this.transitions.length == 0) {
+      alert('No inputs. Please fill them out');
+      return;
+    }   
+    
+    /* check if there are duplicate names */
+    const stateNameArray = this.states.map((st) => st.name);
+    const stateNameSet = new Set(stateNameArray);
+    if (stateNameArray.length != stateNameSet.size) {
+      alert('Please remove duplicate names');
+      return;
+    }
+
+    /* check if (state) names are empty */
+    if (this.states.findIndex((st) => st.name.trim().length == 0) != -1) {
+      alert('States have no name. Please fill them out');
+      return;
+    }
+
+    /* check if (transition) names are empty */
+    if (this.transitions.findIndex((ts) => ts.from.name == '---' || ts.to.name == '---') != -1) {
+      alert('Transitions are not completed. Please fill them out');
+      return;
+    }
+
+    this.graphService.setNodes(this.states);
+    this.graphService.setEdges(this.transitions);
+  }
 }

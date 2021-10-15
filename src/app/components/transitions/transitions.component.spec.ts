@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DropdownfieldComponent } from './dropdownfield.component';
+import { TransitionsComponent } from './transitions.component';
 
-describe('DropdownfieldComponent', () => {
-  let component: DropdownfieldComponent;
-  let fixture: ComponentFixture<DropdownfieldComponent>;
+describe('TransitionsComponent', () => {
+  let component: TransitionsComponent;
+  let fixture: ComponentFixture<TransitionsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DropdownfieldComponent ]
+      declarations: [ TransitionsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DropdownfieldComponent);
+    fixture = TestBed.createComponent(TransitionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

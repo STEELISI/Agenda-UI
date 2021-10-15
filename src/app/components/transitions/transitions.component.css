@@ -1,0 +1,28 @@
+p {
+  padding: 1px 1px 1px 6px;
+  font-size: 12px
+}
+
+.form-control select{
+  width: 15%;
+  height: 40px;
+  margin: 6px;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+
+.form-control input[name="trigger"] {
+  width: 15%;
+  height: 40px;
+  margin: 6px;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+
+.form-control input[name="description"] {
+  width: 40%;
+  height: 40px;
+  margin: 6px;
+  padding: 3px 7px;
+  font-size: 12px;
+}

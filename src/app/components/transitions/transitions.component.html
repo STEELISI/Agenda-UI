@@ -1,0 +1,35 @@
+<div class="field form-control">
+  <p>FROM:</p>
+  <select [(ngModel)]="from" (change)="updateFromState(transition)">
+    <option 
+      *ngFor="let state of states" 
+      [value]="state.name"
+    >{{ state.name }}</option>
+  </select>
+  <p>TO:</p>
+  <select [(ngModel)]="to" (change)="updateToState(transition)">
+    <option 
+      *ngFor="let state of states" 
+      [value]="state.name"
+    >{{ state.name }}</option>
+  </select>
+  <input 
+    name="trigger"   
+    type="text" 
+    [(ngModel)]="trigger"
+    (input)="updateTrigger(transition)"
+    placeholder="Trigger"
+    />
+  <input 
+    name="description"   
+    type="text" 
+    [(ngModel)]="description"
+    (input)="updateDescription(transition)"
+    placeholder="Description"
+    />
+  <fa-icon
+    [icon]="faTimesCircle"
+    [styles]="{'color': 'red', 'font-size': '16px', 'margin-right': '5px'}"
+    (click)="deleteTransition(transition)"
+  ></fa-icon>
+</div>
