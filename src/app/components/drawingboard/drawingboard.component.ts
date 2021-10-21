@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { Node, Edge } from '@swimlane/ngx-graph';
@@ -8,15 +8,18 @@ import { Node, Edge } from '@swimlane/ngx-graph';
   templateUrl: './drawingboard.component.html',
   styleUrls: ['./drawingboard.component.css']
 })
-export class DrawingboardComponent implements OnInit {
+export class DrawingboardComponent implements OnChanges {
 
   @Input() nodes: Node[] = [];
   @Input() links: Edge[] = [];
 
+  zoomToFit$: Subject<boolean> = new Subject();
+  
   constructor() { 
   }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    this.zoomToFit$.next(true)
   }
 
 }

@@ -135,6 +135,14 @@ export class LeftComponent implements OnInit {
     if (this.states.length == 0 && this.transitions.length == 0) {
       return;
     }   
+    /* check if (state) names are empty */
+    if (this.states.findIndex((st) => st.name.trim().length == 0) != -1) {
+      return;
+    }
+    /* check if (transition) names are empty */
+    if (this.transitions.findIndex((ts) => ts.from.name == '---' || ts.to.name == '---') != -1) {
+      return;
+    }
     this.graphService.setNodes(this.states);
     this.graphService.setEdges(this.transitions);
   }
