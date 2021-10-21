@@ -7,11 +7,17 @@
   padding: 0;
 }
 
+html {
+  height: 100%;
+}
+
 body { 
   font-family: "Poppins", sans-serif; 
+  height: 100%;
 }
 
 .header {
+  margin-top: 15px;
   margin-bottom: 30px;
 }
 

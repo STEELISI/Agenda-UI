@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { AngularSplitModule } from 'angular-split';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,7 +29,8 @@ import { DrawingboardComponent } from './components/drawingboard/drawingboard.co
     AppRoutingModule,
     FormsModule,
     FontAwesomeModule,
-    NgxGraphModule
+    NgxGraphModule,
+    AngularSplitModule
   ],
   providers: [],
   bootstrap: [AppComponent]

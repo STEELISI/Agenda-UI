@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { LeftComponent } from './components/left/left.component';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'agenda-ui';
+
+  @ViewChild(LeftComponent) left!: LeftComponent;
+
+  constructor() { }
+
+  onUpdateDraw(): void {
+    this.left.onRefreshGraph();
+  }
 }

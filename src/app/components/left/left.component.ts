@@ -127,7 +127,16 @@ export class LeftComponent implements OnInit {
       return;
     }
 
+    this.onRefreshGraph();
+  }
+
+  onRefreshGraph(): void {
+    /* check if both states and transitions are empty */
+    if (this.states.length == 0 && this.transitions.length == 0) {
+      return;
+    }   
     this.graphService.setNodes(this.states);
     this.graphService.setEdges(this.transitions);
   }
+
 }
