@@ -143,8 +143,8 @@ export class LeftComponent implements OnInit {
     if (this.transitions.findIndex((ts) => ts.from.name == '---' || ts.to.name == '---') != -1) {
       return;
     }
-    this.graphService.setNodes(this.states);
-    this.graphService.setEdges(this.transitions);
+    this.graphService.setStates(this.states);
+    this.graphService.setTransitions(this.transitions);
   }
 
 }
