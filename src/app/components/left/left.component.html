@@ -1,5 +1,14 @@
 <div class="header">
-  <h2>Inputs</h2>
+    <h2>Inputs</h2>
+</div>
+
+<div class="center-content">
+  <label style="margin-right: 6px"> Upload a yaml file </label>
+  <input 
+    type="file" 
+    class="upload" 
+    accept=".yml,.yaml"
+    (change)="onUploadYaml($event)" /> 
 </div>
 
 <div class="section">
@@ -21,11 +30,13 @@
 
 <app-transitions
   *ngFor="let transition of transitions"
+  [states]="states"
   [transition] = "transition"
   (updateTransitionEvent)="onUpdateTransition($event)"
   (deleteTransitionEvent)="onDeleteTransition($event)"
 ></app-transitions>
 
-<div class="submission">
-  <button class="summary-button" (click)="onDrawGraph()">Summary</button>
+<div class="center-content">
+  <label style="margin-right: 6px"> Generate a yaml file </label>
+  <button class="generate-button" (click)="onDrawGraph()">Generate</button>
 </div>

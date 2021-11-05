@@ -18,10 +18,6 @@ export class StatesComponent implements OnInit {
   @Output() updateStateEvent: EventEmitter<State> = new EventEmitter();
   @Output() deleteStateEvent: EventEmitter<State> = new EventEmitter();
 
-  name: string = '';
-  description: string = '';
-  start: boolean = false;
-  terminus: boolean = false;
   faTimesCircle = faTimesCircle;
   constructor() { }
   
@@ -29,22 +25,18 @@ export class StatesComponent implements OnInit {
   }
 
   updateName(state: State) {
-    state.name = this.name; 
     this.updateStateEvent.emit(state);
   }
 
   updateDescription(state: State) {
-    state.description = this.description;
     this.updateStateEvent.emit(state);
   }
 
   updateStart(state: State) {
-    state.start = this.start;
     this.updateStateEvent.emit(state);
   }
 
   updateTerminus(state: State) {
-    state.terminus = this.terminus;
     this.updateStateEvent.emit(state);
   }
 

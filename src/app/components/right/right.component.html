@@ -5,10 +5,11 @@
 <app-drawingboard
   [nodes]="nodes"
   [links]="links"
+  (resizableBoardEvent)="onRefreshBoard()"
 ></app-drawingboard>
 
 <div class="buttons">
   <button 
     class="save-button"
-    (click)="onSubmit()">Save</button>
+    (click)="onSubmit()">Download</button>
 </div>

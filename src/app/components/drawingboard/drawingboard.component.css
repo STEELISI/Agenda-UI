@@ -1,4 +1,11 @@
-.border {
-  border-style: dotted;
+div {
+  border: 1px solid black;
   width: 100%;
+}
+
+.resizable-board {
+  min-height: 200px;
+  resize: vertical;
+  overflow: auto;
+  max-height: 555px;
 }

@@ -1,29 +1,29 @@
 <div class="field form-control">
   <p>FROM:</p>
-  <select [(ngModel)]="from" (change)="updateFromState(transition)">
+  <select [(ngModel)]="transition.from" (change)="updateFromState(transition)">
     <option 
       *ngFor="let state of states" 
-      [value]="state.name"
+      [ngValue]="state"
     >{{ state.name }}</option>
   </select>
   <p>TO:</p>
-  <select [(ngModel)]="to" (change)="updateToState(transition)">
+  <select [(ngModel)]="transition.to" (change)="updateToState(transition)">
     <option 
       *ngFor="let state of states" 
-      [value]="state.name"
+      [ngValue]="state"
     >{{ state.name }}</option>
   </select>
   <input 
     name="trigger"   
     type="text" 
-    [(ngModel)]="trigger"
+    [(ngModel)]="transition.trigger"
     (input)="updateTrigger(transition)"
     placeholder="Trigger"
     />
   <input 
     name="description"   
     type="text" 
-    [(ngModel)]="description"
+    [(ngModel)]="transition.description"
     (input)="updateDescription(transition)"
     placeholder="Description"
     />

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { Node, Edge } from '@swimlane/ngx-graph';
 import { GraphService } from '../../services/graph.service';
@@ -46,6 +46,8 @@ export class RightComponent implements OnInit {
   nodes: Node[] = [];
   links: Edge[] = [];
 
+  @Output() refreshBoardEvent: EventEmitter<boolean> = new EventEmitter();
+
   constructor(private graphService: GraphService) { 
     this.graphService.getStates().subscribe((states) => this.onUpdateNode(states));
     this.graphService.getTransitions().subscribe((transitions) => this.onUpdateEdge(transitions));
@@ -56,7 +58,12 @@ export class RightComponent implements OnInit {
  
   onUpdateNode(states: State[]): void {
     let nodes: Node[] = [];
-    states.forEach((st) => nodes.push({ id: st.id.toString(), label: st.name }));
+    states.forEach((st) => {
+      nodes.push({
+        id: st.id.toString(),
+        label: st.name
+      });
+    });
 
     this.states = states;
     this.nodes = nodes;
@@ -64,12 +71,22 @@ export class RightComponent implements OnInit {
 
   onUpdateEdge(transitions: Transition[]): void {
     let edges: Edge[] = [];
-    transitions.forEach((ts) => edges.push({ id: ts.id.toString(),
-                                             source: ts.from.id.toString(),
-                                             target: ts.to.id.toString() }));
+
+    transitions.forEach((ts) => {
+      edges.push({
+        id: ts.id.toString(),
+        source: ts.from.id.toString(),
+        target: ts.to.id.toString(),
+        label: ts.trigger
+      });
+    });
 
     this.transitions = transitions;
     this.links = edges;
+  }
+
+  onRefreshBoard(): void {
+    this.refreshBoardEvent.emit(true);
   }
 
   onSubmit(): void {

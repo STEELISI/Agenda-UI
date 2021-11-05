@@ -2,27 +2,27 @@
   <input 
     type="text"
     name="name"
-    [(ngModel)]="name" 
+    [(ngModel)]="state.name" 
     (input)="updateName(state)" 
-    placeholder="Name" />
+    placeholder="Name"/>
   <input 
     type="text" 
     name="description" 
-    [(ngModel)]="description"
+    [(ngModel)]="state.description"
     (input)="updateDescription(state)"
     placeholder="Description"/>
   <div class="checkbox" name="start">
     <label>Start</label>
     <input 
-      type="checkbox" 
-      [(ngModel)]="start"
+      type="checkbox"
+      [(ngModel)]="state.start"
       (change)="updateStart(state)" />
   </div>
   <div class="checkbox" name="terminus">
     <label>Terminus</label>
     <input 
       type="checkbox" 
-      [(ngModel)]="terminus"
+      [(ngModel)]="state.terminus"
       (change)="updateTerminus(state)" />
   </div>
   <fa-icon

@@ -11,7 +11,7 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./transitions.component.css']
 })
 export class TransitionsComponent implements OnInit {
-  states: State[] = STATES;
+  @Input() states: State[] = [];
 
   @Input() transition: Transition = { id: "id", 
                                       from: { id: "from", 
@@ -28,16 +28,10 @@ export class TransitionsComponent implements OnInit {
                                       },
                                       trigger: '',
                                       description: ''
-
   }
   @Output() updateTransitionEvent: EventEmitter<Transition> = new EventEmitter();
   @Output() deleteTransitionEvent: EventEmitter<Transition> = new EventEmitter();
 
-  from: string = "---";
-  to: string = "---";
-  trigger: string = '';
-  description: string = '';
-  
   faTimesCircle = faTimesCircle;
 
   constructor() { }
@@ -46,26 +40,18 @@ export class TransitionsComponent implements OnInit {
   }
 
   updateFromState(transition: Transition) {
-    const index = this.states.findIndex((st) => st.name == this.from);
-   
-    transition.from = this.states[index]
     this.updateTransitionEvent.emit(transition);
   }
 
   updateToState(transition: Transition) {
-    const index = this.states.findIndex((st) => st.name == this.to);
-    
-    transition.to = this.states[index]
     this.updateTransitionEvent.emit(transition);
   }
 
   updateTrigger(transition: Transition) {
-    transition.trigger = this.trigger;
     this.updateTransitionEvent.emit(transition);
   }
 
   updateDescription(transition: Transition) {
-    transition.description = this.description;
     this.updateTransitionEvent.emit(transition);
   }
 

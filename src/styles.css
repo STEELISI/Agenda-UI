@@ -17,8 +17,9 @@ body {
 }
 
 .header {
-  margin-top: 15px;
-  margin-bottom: 30px;
+  margin-top: 9px;
+  margin-bottom: 18px;
+  border-style: hidden hidden groove hidden;
 }
 
 .field {

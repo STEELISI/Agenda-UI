@@ -1,14 +1,66 @@
 import { Component, OnInit } from '@angular/core';
 
+import * as yaml from 'js-yaml';
+
+import { Agenda } from '../../Agenda';
 import { State } from '../../State';
 import { Transition } from '../../Transition';
-import { STATES } from '../../mock-states';
-import { TRANSITIONS } from '../../mock-transitions';
 
 import { GraphService } from '../../services/graph.service';
 
 function generateID() {
     return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function extractAgenda(agenda: Agenda) {
+  let states: State[] = [];
+  let transitions: Transition[] = [];
+
+  /* STATE Filling */
+  agenda.states.forEach((st) => {
+    states.push({
+      id: generateID(), 
+      name: st.name, 
+      description: st.description,
+      start: false,
+      terminus: false
+    });
+  });
+
+  agenda.terminus_names.forEach((name) => {
+    let index = states.findIndex((st) => st.name == name);
+    states[index].terminus = true;
+  });
+
+  let index = states.findIndex((st) => st.name == agenda.start_state_name);
+  states[index].start = true;
+
+  /* TRANSITION Filling */
+  for (var from_name of Object.keys(agenda.transitions)) {
+    for (var trigger of Object.keys(agenda.transitions[from_name])){
+      /*console.log(from + ", " + trigger + ", " + agenda.transitions[from_name][trigger]);*/
+
+      let to_name = agenda.transitions[from_name][trigger]; 
+      
+      let from_index = states.findIndex((st) => st.name == from_name); 
+      let to_index = states.findIndex((st) => st.name == to_name);
+      let trigger_index = agenda.transition_triggers.findIndex((tt) => tt.name = trigger);
+
+      transitions.push({
+        id: generateID(),
+        from: states[from_index],
+        to: states[to_index],
+        trigger: agenda.transition_triggers[trigger_index].name,
+        description: agenda.transition_triggers[trigger_index].description 
+      });
+    }
+  }
+
+  return {
+    states,
+    transitions
+  };
+
 }
 
 @Component({
@@ -17,16 +69,32 @@ function generateID() {
   styleUrls: ['./left.component.css']
 })
 export class LeftComponent implements OnInit {
-  states: State[] = STATES;
-  transitions: Transition[] = TRANSITIONS;
+  states: State[] = [];
+  transitions: Transition[] = [];
 
   constructor(private graphService: GraphService) { }
 
   ngOnInit(): void {
   }
 
-  onAddState(): void {
-    this.states.push({  id: generateID(),
+  onUploadYaml($event: Event): void {
+    let upload = $event.target as HTMLInputElement;
+
+    if (upload.value) {
+      let file: File = (upload.files as FileList)[0]; 
+      
+      let text = file.text(); 
+      text
+        .then(value => { 
+          let agenda = extractAgenda(yaml.load(value));
+          this.states = agenda.states; 
+          this.transitions = agenda.transitions;
+        }); 
+    }
+  }
+
+  onAddState(id: string = generateID()): void {
+    this.states.push({  id: id,
                         name: '',
                         description: '',
                         start: false,
@@ -58,12 +126,12 @@ export class LeftComponent implements OnInit {
       }
     }
 
-    console.log(STATES);
-    console.log(TRANSITIONS);
+    console.log(this.states);
+    console.log(this.transitions);
   }
 
-  onAddTransition(): void {
-    this.transitions.push({   id: generateID(),
+  onAddTransition(id: string = generateID()): void {
+    this.transitions.push({   id: id,
                               from: { id: "from", 
                                       name: '---',
                                       description: '',
@@ -95,7 +163,7 @@ export class LeftComponent implements OnInit {
     else 
       this.transitions.splice(index);
     
-    console.log(TRANSITIONS);
+    console.log(this.transitions);
   }
 
   onDrawGraph(): void {
@@ -103,7 +171,7 @@ export class LeftComponent implements OnInit {
 
     /* check if both states and transitions are empty */
     if (this.states.length == 0 && this.transitions.length == 0) {
-      alert('No inputs. Please fill them out');
+      alert('No inputs. Please upload a yaml file or fill the input form');
       return;
     }   
     

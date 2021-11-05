@@ -5,6 +5,26 @@
   padding: 6px;
 }
 
+.upload-button {
+  background-color: #; /* Green */
+  border: 2px solid green;
+  border-radius: 12px;
+  color: white;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 2px 1px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background-color: #119e17;
+  color: white;
+}
+
 .add-button {
   background-color: #4CAF50; /* Green */
   border: 2px solid green;
@@ -25,14 +45,27 @@
   color: white;
 }
 
-.submission {
+.center-content {
   display: flex;
   justify-content: center;
   align-items: baseline;
-  margin-top: 25px;
+  margin-top: 19px;
+  margin-bottom: 6px;
 }
 
-.summary-button {
+.upload::-webkit-file-upload-button {
+  color: black;
+  display: inline-block;
+  background: #eeeeee;
+  border: 2px solid grey;
+  padding: 7px 15px;
+  border-radius: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.generate-button {
   background-color: #e7e7e7; /* Gray */
   border: 2px solid grey;
   border-radius: 12px;
@@ -47,7 +80,7 @@
   cursor: pointer;
 }
 
-.summary-button:hover {
+.generate-button:hover {
   background-color: #bebebe;
   color: black;
 }
