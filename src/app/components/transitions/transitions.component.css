@@ -5,7 +5,7 @@ p {
 
 .form-control select{
   width: 15%;
-  height: 40px;
+  height: 24px;
   margin: 6px;
   padding: 3px 7px;
   font-size: 12px;
@@ -13,7 +13,7 @@ p {
 
 .form-control input[name="trigger"] {
   width: 15%;
-  height: 40px;
+  height: 24px;
   margin: 6px;
   padding: 3px 7px;
   font-size: 12px;
@@ -21,7 +21,7 @@ p {
 
 .form-control input[name="description"] {
   width: 40%;
-  height: 40px;
+  height: 24px;
   margin: 6px;
   padding: 3px 7px;
   font-size: 12px;

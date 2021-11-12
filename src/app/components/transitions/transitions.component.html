@@ -1,4 +1,4 @@
-<div class="field form-control">
+<div class="field form-control" *ngIf="showTransition">
   <p>FROM:</p>
   <select [(ngModel)]="transition.from" (change)="updateFromState(transition)">
     <option 

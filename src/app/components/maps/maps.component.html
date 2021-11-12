@@ -1,0 +1,136 @@
+<div class="container">
+  <div class="map-block">
+    <h4 style="text-align: center; padding-bottom: 6px;">Action Map</h4>
+    <div class="input-border">
+      <div *ngFor="let state of states" class="form-control">
+        <p style="padding-bottom: 6px">{{ state.name }}</p>
+        <div id="'action-' + {{ state.name }}" class="dropdown-check-list" #dropdownAction>
+          <span class="anchor" 
+            (click)="showActionList(dropdownAction.id)"
+          >Select Actions</span>
+          <ul class="items">
+            <li>
+              <input type="checkbox" />
+              <label>
+                Select All
+              </label>
+            </li> 
+            <li>
+              <input type="checkbox" />
+              <label>
+                Unselect All
+              </label>
+            </li> 
+            <li *ngFor="let action_ of actions">
+              <input type="checkbox" />
+              <label>
+                {{ action_.name }}
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="map-block">
+    <h4 style="text-align: center; padding-bottom: 6px;">Stall Action Map</h4>
+    <div class="input-border">
+      <div *ngFor="let state of states" class="form-control">
+        <p style="padding-bottom: 6px">{{ state.name }}</p>
+        <div id="'stall-' + {{ state.name }}" class="dropdown-check-list" #dropdownStall>
+          <span class="anchor" 
+            (click)="showActionList(dropdownStall.id)"
+          >Select Actions</span>
+          <ul class="items">
+            <li>
+              <input type="checkbox" />
+              <label>
+                Select All
+              </label>
+            </li> 
+            <li>
+              <input type="checkbox" />
+              <label>
+                Unselect All
+              </label>
+            </li> 
+            <li *ngFor="let action_ of actions">
+              <input type="checkbox" />
+              <label>
+                {{ action_.name }}
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="policy-block">
+    <h4 style="text-align: center; padding-bottom: 6px;">Policy</h4>
+    <div class="input-border">
+      <div class="policy-input-form">
+        <p>Maximum number of transitions</p>
+        <input 
+          name="max-transitions"
+          type="number" 
+          min="0"
+          max="100"
+          step="10"
+          value="5"
+          />
+      </div>
+      <div class="policy-input-form">
+        <p>Absolute accepted threshold</p>
+        <input 
+          name="absolute-accept-thresh" 
+          type="number" 
+          min="0.0"
+          max="1.0"
+          step="0.1"
+          value="0.6"
+          />
+      </div>
+      <div class="policy-input-form">
+        <p>Minimum accepted threshold with differential</p>
+        <input 
+          name="min-accept-thresh-w-differential" 
+          type="number" 
+          min="0.0"
+          max="1.0"
+          step="0.1"
+          value="0.2"
+          />
+      </div>
+      <div class="policy-input-form">
+        <p>Accepted threshold differential</p>
+        <input 
+          name="Accept-thresh-differential"
+          type="number" 
+          min="0.0"
+          max="1.0"
+          step="0.1"
+          value="0.1"
+          />
+      </div>
+      <div class="policy-input-form">
+        <p>Kickoff threshold</p>
+        <input 
+          name="kickoff-thresh"
+          type="number" 
+          min="0.0"
+          max="1.0"
+          step="0.1"
+          value="1.0"
+          />
+      </div>
+      <div class="policy-input-form">
+        <p>Reuse</p>
+        <input 
+          name="reuse"
+          type="checkbox"
+          style="vertical-align: middle;"
+          />
+      </div>
+    </div>
+  </div>
+</div>

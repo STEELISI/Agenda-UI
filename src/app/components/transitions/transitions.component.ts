@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { State } from '../../State';
-import { STATES } from '../../mock-states';
 import { Transition } from '../../Transition';
 
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +31,7 @@ export class TransitionsComponent implements OnInit {
   @Output() updateTransitionEvent: EventEmitter<Transition> = new EventEmitter();
   @Output() deleteTransitionEvent: EventEmitter<Transition> = new EventEmitter();
 
+  @Input() showTransition: boolean = false;
   faTimesCircle = faTimesCircle;
 
   constructor() { }

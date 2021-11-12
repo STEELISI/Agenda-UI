@@ -14,6 +14,8 @@ import { RightComponent } from './components/right/right.component';
 import { StatesComponent } from './components/states/states.component';
 import { TransitionsComponent } from './components/transitions/transitions.component';
 import { DrawingboardComponent } from './components/drawingboard/drawingboard.component';
+import { ActionsComponent } from './components/actions/actions.component';
+import { MapsComponent } from './components/maps/maps.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { DrawingboardComponent } from './components/drawingboard/drawingboard.co
     StatesComponent,
     TransitionsComponent,
     DrawingboardComponent,
+    ActionsComponent,
+    MapsComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +36,7 @@ import { DrawingboardComponent } from './components/drawingboard/drawingboard.co
     FontAwesomeModule,
     AngularResizeEventModule,
     NgxGraphModule,
-    AngularSplitModule
+    AngularSplitModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

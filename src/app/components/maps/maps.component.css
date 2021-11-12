@@ -1,0 +1,99 @@
+.container {
+  display: flex;
+  align-items: baseline;
+  padding-top: 9px;
+}
+
+.map-block {
+  padding-left: 6px;
+  padding-right: 6px;
+  width: 32%;
+  word-wrap: break-word;
+}
+
+.policy-block {
+  padding-left: 6px;
+  padding-right: 6px;
+  width: 36%;
+  word-wrap: break-word;
+}
+
+.input-border {
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 25px;
+}
+
+.dropdown-check-list .anchor {
+  position: relative;
+  width: 100%;
+  font-size: 12px;
+  cursor: pointer;
+  display: block;
+  padding: 6px 50px 6px 10px;
+  border: 1px solid #ddd;
+}
+
+.dropdown-check-list .anchor:after {
+  position: absolute;
+  content: "";
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  padding: 5px;
+  right: 10px;
+  top: 20%;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+
+.dropdown-check-list .anchor:active:after {
+  right: 8px;
+  top: 21%;
+}
+
+.dropdown-check-list ul.items {
+  display: none;
+  border: 1px solid #ccc;
+}
+
+.dropdown-check-list ul.items li {
+  list-style: none;
+}
+
+.dropdown-check-list ul.items li input {
+  width: 10%;
+  display: inline-block;
+  vertical-align: middle;
+  transform: scale(1.5);
+}
+
+.dropdown-check-list ul.items li label {
+  width: 90%;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.dropdown-check-list.visible .anchor {
+  color: #0094ff;
+}
+
+.dropdown-check-list.visible .items {
+  display: block;
+}
+
+.policy-input-form p {
+  display: inline-block;
+  width: 80%;
+  font-size: 12px;
+  padding-right: 6px;
+}
+
+.policy-input-form input {
+  display: inline-block;
+  width: 20%;
+  font-size: 12px;
+}

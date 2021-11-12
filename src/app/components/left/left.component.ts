@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { faCaretSquareUp, faCaretSquareDown } from '@fortawesome/free-solid-svg-icons';
 
 import * as yaml from 'js-yaml';
 
 import { Agenda } from '../../Agenda';
 import { State } from '../../State';
 import { Transition } from '../../Transition';
+import { Action } from '../../Action';
 
 import { GraphService } from '../../services/graph.service';
 
@@ -71,10 +73,32 @@ function extractAgenda(agenda: Agenda) {
 export class LeftComponent implements OnInit {
   states: State[] = [];
   transitions: Transition[] = [];
+  actions: Action[] = [];
+
+  faUp = faCaretSquareUp;
+  faDown = faCaretSquareDown;
+
+  arrowState = this.faUp;
+  arrowTransition = this.faUp;
+
+  showState = false;
+  showTransition = false;
+
+  repeats: number[] = [1, 2, 3]
 
   constructor(private graphService: GraphService) { }
 
   ngOnInit(): void {
+  }
+
+  onShowState(): void {
+    this.arrowState = (this.arrowState == this.faUp) ? this.faDown : this.faUp;
+    this.showState = (this.arrowState == this.faUp) ? false : true;
+  }
+
+  onShowTransition(): void {
+    this.arrowTransition = (this.arrowTransition == this.faUp) ? this.faDown : this.faUp;
+    this.showTransition = (this.arrowTransition == this.faUp) ? false : true;
   }
 
   onUploadYaml($event: Event): void {
@@ -89,6 +113,8 @@ export class LeftComponent implements OnInit {
           let agenda = extractAgenda(yaml.load(value));
           this.states = agenda.states; 
           this.transitions = agenda.transitions;
+          if (this.showState == false) this.onShowState();
+          if (this.showTransition == false) this.onShowTransition();
         }); 
     }
   }
@@ -100,6 +126,9 @@ export class LeftComponent implements OnInit {
                         start: false,
                         terminus: false
     });
+
+    if (this.showState == false)
+      this.onShowState();
   }
 
   onUpdateState($event: State): void {
@@ -147,6 +176,9 @@ export class LeftComponent implements OnInit {
                               trigger: '',
                               description: ''
     });
+
+    if (this.showTransition == false)
+      this.onShowTransition();
   }
 
   onUpdateTransition($event: Transition): void {
@@ -164,6 +196,33 @@ export class LeftComponent implements OnInit {
       this.transitions.splice(index);
     
     console.log(this.transitions);
+  }
+
+  onAddAction(id: string = generateID()): void {
+    this.actions.push({  
+      id: id,
+      name: '',
+      utterance: '',
+      flag: false,
+      repeat: 1
+    });
+  }
+
+  onUpdateAction($event: Action): void {
+    const index = this.actions.findIndex((act) => act.id == $event.id);
+
+    this.actions[index] = $event;
+  }
+
+  onDeleteAction($event: Action): void {
+    const index = this.actions.findIndex((act) => act.id == $event.id);
+
+    if (this.actions.length > 1) 
+      this.actions.splice(index, 1);
+    else 
+      this.actions.splice(index);
+    
+    console.log(this.actions);
   }
 
   onDrawGraph(): void {

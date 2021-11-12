@@ -1,4 +1,4 @@
-<div class="field form-control">
+<div class="field form-control" *ngIf="showState">
   <input 
     type="text"
     name="name"
@@ -27,7 +27,7 @@
   </div>
   <fa-icon
     [icon]="faTimesCircle"
-    [styles]="{'color': 'red', 'font-size': '16px', 'margin-right': '9px'}"
+    [styles]="{'color': 'red', 'font-size': '16px', 'margin-right': '9px', 'cursor': 'pointer'}"
     (click)="deleteState(state)"
   ></fa-icon>
 </div>

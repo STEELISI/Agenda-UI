@@ -18,7 +18,9 @@ export class StatesComponent implements OnInit {
   @Output() updateStateEvent: EventEmitter<State> = new EventEmitter();
   @Output() deleteStateEvent: EventEmitter<State> = new EventEmitter();
 
+  @Input() showState: boolean = false;
   faTimesCircle = faTimesCircle;
+
   constructor() { }
   
   ngOnInit(): void {

@@ -1,0 +1,33 @@
+<div class="field form-control">
+  <input 
+    type="text"
+    name="name"
+    [(ngModel)]="action_.name" 
+    (input)="updateName(action_)" 
+    placeholder="Name"/>
+  <input 
+    type="text" 
+    name="utterance"
+    [(ngModel)]="action_.utterance"
+    (input)="updateUtterance(action_)"
+    placeholder="Utterance"/>
+  <label>Repeat</label>
+  <select [(ngModel)]="action_.repeat" (change)="updateRepeat(action_)">
+    <option 
+      *ngFor="let r of repeats" 
+      [ngValue]="r"
+    >{{ r }}</option>
+  </select>
+  <div class="checkbox" name="flag">
+    <label>Flag</label>
+    <input 
+      type="checkbox"
+      [(ngModel)]="action_.flag"
+      (change)="updateFlag(action_)" />
+  </div>
+  <fa-icon
+    [icon]="faTimesCircle"
+    [styles]="{'color': 'red', 'font-size': '16px', 'margin-right': '9px', 'cursor': 'pointer'}"
+    (click)="deleteAction(action_)"
+  ></fa-icon>
+</div>

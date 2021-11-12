@@ -12,29 +12,65 @@
 </div>
 
 <div class="section">
-  <h3>States</h3>
+  <div>
+    <h3>States</h3>
+    <fa-icon
+      [icon]="arrowState"
+      [styles]="{'color': '#d9d9d9', 'font-size': '14px', 'margin-left': '6px', 'cursor': 'pointer'}"
+      (click)="onShowState()"
+    ></fa-icon>
+  </div>
   <button class="add-button" (click)="onAddState()">Add</button>
 </div>
 
 <app-states
   *ngFor="let state of states"
+  [showState]="showState"
   [state]="state"
   (updateStateEvent)="onUpdateState($event)"
   (deleteStateEvent)="onDeleteState($event)"
 ></app-states>
 
 <div class="section">
-  <h3>Transitions</h3>
+  <div>
+    <h3>Transitions</h3>
+    <fa-icon
+      [icon]="arrowTransition"
+      [styles]="{'color': '#d9d9d9', 'font-size': '14px', 'margin-left': '6px', 'cursor': 'pointer'}"
+      (click)="onShowTransition()"
+    ></fa-icon>
+  </div>
   <button class="add-button" (click)="onAddTransition()">Add</button>
 </div>
 
 <app-transitions
   *ngFor="let transition of transitions"
+  [showTransition]="showTransition"
   [states]="states"
   [transition] = "transition"
   (updateTransitionEvent)="onUpdateTransition($event)"
   (deleteTransitionEvent)="onDeleteTransition($event)"
 ></app-transitions>
+
+<div class="section">
+  <div>
+    <h3>Actions</h3>
+  </div>
+  <button class="add-button" (click)="onAddAction()">Add</button>
+</div>
+
+<app-actions
+  *ngFor="let action_ of actions"
+  [action_]="action_"
+  [repeats]="repeats"
+  (updateActionEvent)="onUpdateAction($event)"
+  (deleteActionEvent)="onDeleteAction($event)"
+></app-actions>
+
+<app-maps
+  [states]="states" 
+  [actions]="actions"
+></app-maps>
 
 <div class="center-content">
   <label style="margin-right: 6px"> Generate a yaml file </label>
