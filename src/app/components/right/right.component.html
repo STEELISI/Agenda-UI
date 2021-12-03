@@ -8,6 +8,13 @@
   (resizableBoardEvent)="onRefreshBoard()"
 ></app-drawingboard>
 
+<div class="header">
+  <h2>Agenda</h2>
+</div>
+
+<div *ngIf="agendaStr; else emptyagenda" class="agenda-content">{{ agendaStr }}</div>
+<ng-template #emptyagenda>...</ng-template>
+
 <div class="buttons">
   <button 
     class="save-button"

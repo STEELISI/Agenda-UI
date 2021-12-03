@@ -39,6 +39,17 @@ export class TransitionsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  isKickOff(from: State): boolean {
+    if (from.id == "kickoff")
+      return true;
+    else
+      return false;
+  }
+
+  getStart(): State[] {
+    return this.states.filter((st) => st.start == true);
+  }
+
   updateFromState(transition: Transition) {
     this.updateTransitionEvent.emit(transition);
   }

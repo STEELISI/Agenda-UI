@@ -2,14 +2,14 @@
   <div class="map-block">
     <h4 style="text-align: center; padding-bottom: 6px;">Action Map</h4>
     <div class="input-border">
-      <div *ngFor="let state of states" class="form-control">
-        <p style="padding-bottom: 6px">{{ state.name }}</p>
-        <div id="'action-' + {{ state.name }}" class="dropdown-check-list" #dropdownAction>
+      <div *ngFor="let actionMap of actionMaps" class="form-control">
+        <p style="padding-bottom: 6px">{{ actionMap.state.name }}</p>
+        <div id="'action-' + {{ actionMap.state.name }}" class="dropdown-check-list" #dropdownAction>
           <span class="anchor" 
             (click)="showActionList(dropdownAction.id)"
           >Select Actions</span>
           <ul class="items">
-            <li>
+            <!-- <li>
               <input type="checkbox" />
               <label>
                 Select All
@@ -20,9 +20,13 @@
               <label>
                 Unselect All
               </label>
-            </li> 
+            </li> -->
             <li *ngFor="let action_ of actions">
-              <input type="checkbox" />
+              <input
+                type="checkbox" 
+                [ngModel]="checked(actionMap, action_)"
+                (change)="updateActionMap($event, actionMap, action_)"
+              />
               <label>
                 {{ action_.name }}
               </label>
@@ -35,27 +39,19 @@
   <div class="map-block">
     <h4 style="text-align: center; padding-bottom: 6px;">Stall Action Map</h4>
     <div class="input-border">
-      <div *ngFor="let state of states" class="form-control">
-        <p style="padding-bottom: 6px">{{ state.name }}</p>
-        <div id="'stall-' + {{ state.name }}" class="dropdown-check-list" #dropdownStall>
+      <div *ngFor="let stallMap of stallMaps" class="form-control">
+        <p style="padding-bottom: 6px">{{ stallMap.state.name }}</p>
+        <div id="'stall-' + {{ stallMap.state.name }}" class="dropdown-check-list" #dropdownStall>
           <span class="anchor" 
             (click)="showActionList(dropdownStall.id)"
           >Select Actions</span>
           <ul class="items">
-            <li>
-              <input type="checkbox" />
-              <label>
-                Select All
-              </label>
-            </li> 
-            <li>
-              <input type="checkbox" />
-              <label>
-                Unselect All
-              </label>
-            </li> 
             <li *ngFor="let action_ of actions">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                [ngModel]="checked(stallMap, action_)"
+                (change)="updateStallMap($event, stallMap, action_)"
+              />
               <label>
                 {{ action_.name }}
               </label>
@@ -77,6 +73,8 @@
           max="100"
           step="10"
           value="5"
+          [(ngModel)]="policy.max_transitions"
+          (input)="updatePolicy(policy)" 
           />
       </div>
       <div class="policy-input-form">
@@ -88,6 +86,8 @@
           max="1.0"
           step="0.1"
           value="0.6"
+          [(ngModel)]="policy.absolute_accept_thresh"
+          (input)="updatePolicy(policy)" 
           />
       </div>
       <div class="policy-input-form">
@@ -99,6 +99,8 @@
           max="1.0"
           step="0.1"
           value="0.2"
+          [(ngModel)]="policy.min_accept_thresh_w_differential"
+          (input)="updatePolicy(policy)" 
           />
       </div>
       <div class="policy-input-form">
@@ -110,6 +112,8 @@
           max="1.0"
           step="0.1"
           value="0.1"
+          [(ngModel)]="policy.accept_thresh_differential"
+          (input)="updatePolicy(policy)"
           />
       </div>
       <div class="policy-input-form">
@@ -121,6 +125,8 @@
           max="1.0"
           step="0.1"
           value="1.0"
+          [(ngModel)]="policy.kickoff_thresh"
+          (input)="updatePolicy(policy)" 
           />
       </div>
       <div class="policy-input-form">
@@ -129,6 +135,8 @@
           name="reuse"
           type="checkbox"
           style="vertical-align: middle;"
+          [(ngModel)]="policy.reuse"
+          (change)="updatePolicy(policy)" 
           />
       </div>
     </div>

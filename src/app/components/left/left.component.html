@@ -8,7 +8,7 @@
     type="file" 
     class="upload" 
     accept=".yml,.yaml"
-    (change)="onUploadYaml($event)" /> 
+    (change)="onUploadYAML($event)" />
 </div>
 
 <div class="section">
@@ -24,7 +24,7 @@
 </div>
 
 <app-states
-  *ngFor="let state of states"
+  *ngFor="let state of states | slice:1"
   [showState]="showState"
   [state]="state"
   (updateStateEvent)="onUpdateState($event)"
@@ -55,12 +55,18 @@
 <div class="section">
   <div>
     <h3>Actions</h3>
+    <fa-icon
+      [icon]="arrowAction"
+      [styles]="{'color': '#d9d9d9', 'font-size': '14px', 'margin-left': '6px', 'cursor': 'pointer'}"
+      (click)="onShowAction()"
+    ></fa-icon>
   </div>
   <button class="add-button" (click)="onAddAction()">Add</button>
 </div>
 
 <app-actions
   *ngFor="let action_ of actions"
+  [showAction]="showAction"
   [action_]="action_"
   [repeats]="repeats"
   (updateActionEvent)="onUpdateAction($event)"
@@ -68,11 +74,22 @@
 ></app-actions>
 
 <app-maps
-  [states]="states" 
-  [actions]="actions"
+  [actionMaps]="actionMaps"
+  [stallMaps]="stallMaps"
+  [policy]="policy"
+  [actions]="actions" 
+  (updateActionMapEvent)="onUpdateActionMap($event)"
+  (updateStallMapEvent)="onUpdateStallMap($event)"
+  (updatePolicyEvent)="onUpdatePolicy($event)"
 ></app-maps>
 
 <div class="center-content">
-  <label style="margin-right: 6px"> Generate a yaml file </label>
-  <button class="generate-button" (click)="onDrawGraph()">Generate</button>
+  <label style="margin-right: 6px">Agenda: </label>
+  <input 
+    name="agenda-name"
+    type="text" 
+    [(ngModel)]="name"
+    placeholder="Name"
+    />
+  <button class="generate-button" (click)="onGenerateYAML()">Generate</button>
 </div>

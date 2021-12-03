@@ -6,6 +6,11 @@
   margin-bottom: 9px;
 }
 
+.agenda-content {
+  font-size: 9px;
+  white-space: pre-wrap;
+}
+
 .save-button {
   background-color: #e7e7e7; /* Gray */
   border: 2px solid grey;

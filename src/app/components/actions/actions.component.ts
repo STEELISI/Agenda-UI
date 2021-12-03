@@ -20,6 +20,7 @@ export class ActionsComponent implements OnInit {
   @Output() deleteActionEvent: EventEmitter<Action> = new EventEmitter();
 
   @Input() repeats: number[] = [];
+  @Input() showAction: boolean = false;
   faTimesCircle = faTimesCircle;
 
 

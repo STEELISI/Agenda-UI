@@ -3,67 +3,17 @@ import { faCaretSquareUp, faCaretSquareDown } from '@fortawesome/free-solid-svg-
 
 import * as yaml from 'js-yaml';
 
-import { Agenda } from '../../Agenda';
+import { Agenda, extractAgenda, generateAgenda } from '../../Agenda';
 import { State } from '../../State';
 import { Transition } from '../../Transition';
 import { Action } from '../../Action';
+import { ActionMap } from '../../ActionMap';
+import { Policy } from '../../Policy';
+import { generateID } from '../../utils';
 
+import { AgendaService } from '../../services/agenda.service';
 import { GraphService } from '../../services/graph.service';
 
-function generateID() {
-    return '_' + Math.random().toString(36).substr(2, 9);
-}
-
-function extractAgenda(agenda: Agenda) {
-  let states: State[] = [];
-  let transitions: Transition[] = [];
-
-  /* STATE Filling */
-  agenda.states.forEach((st) => {
-    states.push({
-      id: generateID(), 
-      name: st.name, 
-      description: st.description,
-      start: false,
-      terminus: false
-    });
-  });
-
-  agenda.terminus_names.forEach((name) => {
-    let index = states.findIndex((st) => st.name == name);
-    states[index].terminus = true;
-  });
-
-  let index = states.findIndex((st) => st.name == agenda.start_state_name);
-  states[index].start = true;
-
-  /* TRANSITION Filling */
-  for (var from_name of Object.keys(agenda.transitions)) {
-    for (var trigger of Object.keys(agenda.transitions[from_name])){
-      /*console.log(from + ", " + trigger + ", " + agenda.transitions[from_name][trigger]);*/
-
-      let to_name = agenda.transitions[from_name][trigger]; 
-      
-      let from_index = states.findIndex((st) => st.name == from_name); 
-      let to_index = states.findIndex((st) => st.name == to_name);
-      let trigger_index = agenda.transition_triggers.findIndex((tt) => tt.name = trigger);
-
-      transitions.push({
-        id: generateID(),
-        from: states[from_index],
-        to: states[to_index],
-        trigger: agenda.transition_triggers[trigger_index].name,
-        description: agenda.transition_triggers[trigger_index].description 
-      });
-    }
-  }
-
-  return {
-    states,
-    transitions
-  };
-
-}
 
 @Component({
   selector: 'app-left',
@@ -71,24 +21,45 @@ function extractAgenda(agenda: Agenda) {
   styleUrls: ['./left.component.css']
 })
 export class LeftComponent implements OnInit {
+  name: string = '';
   states: State[] = [];
+  kickoff: State = {
+    id: 'kickoff', 
+    name: 'KICKOFF', 
+    description: '',
+    start: false,
+    terminus: false
+  };
   transitions: Transition[] = [];
   actions: Action[] = [];
+  actionMaps: ActionMap[] = [];
+  stallMaps: ActionMap[] = [];
+  policy: Policy = {
+    reuse: false,
+    max_transitions: 5,
+    absolute_accept_thresh: 0.6,
+    min_accept_thresh_w_differential: 0.2,
+    accept_thresh_differential: 0.1,
+    kickoff_thresh: 1.0
+  };
 
   faUp = faCaretSquareUp;
   faDown = faCaretSquareDown;
 
   arrowState = this.faUp;
   arrowTransition = this.faUp;
+  arrowAction = this.faUp;
 
   showState = false;
   showTransition = false;
+  showAction = false;
 
   repeats: number[] = [1, 2, 3]
 
-  constructor(private graphService: GraphService) { }
+  constructor(private agendaService: AgendaService, private graphService: GraphService) { }
 
   ngOnInit(): void {
+    this.states.push(this.kickoff);
   }
 
   onShowState(): void {
@@ -101,7 +72,12 @@ export class LeftComponent implements OnInit {
     this.showTransition = (this.arrowTransition == this.faUp) ? false : true;
   }
 
-  onUploadYaml($event: Event): void {
+  onShowAction(): void {
+    this.arrowAction = (this.arrowAction == this.faUp) ? this.faDown : this.faUp;
+    this.showAction = (this.arrowAction == this.faUp) ? false : true;
+  }
+
+  onUploadYAML($event: Event): void {
     let upload = $event.target as HTMLInputElement;
 
     if (upload.value) {
@@ -111,10 +87,21 @@ export class LeftComponent implements OnInit {
       text
         .then(value => { 
           let agenda = extractAgenda(yaml.load(value));
-          this.states = agenda.states; 
+          this.name = agenda.name;
+          this.states = [this.kickoff];
+          agenda.states.forEach((st) => this.states.push(st));
           this.transitions = agenda.transitions;
+          this.transitions.forEach((ts) => {
+            if (ts.id.includes("kickoff"))
+              ts.from = this.kickoff
+          });
           if (this.showState == false) this.onShowState();
           if (this.showTransition == false) this.onShowTransition();
+          if (this.showAction == false) this.onShowAction();
+          this.actions = agenda.actions;
+          this.actionMaps = agenda.actionMaps;
+          this.stallMaps = agenda.stallMaps;
+          this.policy = agenda.policy;
         }); 
     }
   }
@@ -135,6 +122,24 @@ export class LeftComponent implements OnInit {
     const index = this.states.findIndex((st) => st.id == $event.id);
 
     this.states[index] = $event;
+
+    /* update actionMaps and stallMaps */
+    let act_index = this.actionMaps.findIndex((act_map) => act_map.state.id == $event.id);
+    if (act_index == -1) { /* add new state to actionMaps */
+      this.actionMaps.push({
+        state: $event,
+        actions: []
+      });
+    }
+    
+    let stl_index = this.stallMaps.findIndex((stl_map) => stl_map.state.id == $event.id);
+    if (stl_index == -1) { /* add new state to stallMaps */
+      this.stallMaps.push({
+        state: $event,
+        actions: []
+      });
+    }
+
   }
 
   onDeleteState($event: State): void {
@@ -155,8 +160,23 @@ export class LeftComponent implements OnInit {
       }
     }
 
+    /* remove maps in actionMaps and stallMaps */
+    let act_index = this.actionMaps.findIndex((act_map) => act_map.state.id == $event.id);
+    if (this.actionMaps.length > 1) 
+      this.actionMaps.splice(act_index, 1);
+    else 
+      this.actionMaps.splice(act_index);
+
+    let stl_index = this.stallMaps.findIndex((stl_map) => stl_map.state.id == $event.id);
+    if (this.stallMaps.length > 1) 
+      this.stallMaps.splice(stl_index, 1);
+    else 
+      this.stallMaps.splice(stl_index);
+
     console.log(this.states);
     console.log(this.transitions);
+    /* console.log(this.actionMaps);
+    console.log(this.stallMaps); */
   }
 
   onAddTransition(id: string = generateID()): void {
@@ -206,6 +226,9 @@ export class LeftComponent implements OnInit {
       flag: false,
       repeat: 1
     });
+
+    if (this.showAction == false)
+      this.onShowAction();
   }
 
   onUpdateAction($event: Action): void {
@@ -225,11 +248,29 @@ export class LeftComponent implements OnInit {
     console.log(this.actions);
   }
 
-  onDrawGraph(): void {
+  onUpdateActionMap($event: ActionMap): void {
+    const index = this.actionMaps.findIndex((action_map) => action_map.state.id == $event.state.id);
+
+    this.actionMaps[index] = $event;
+    /* console.log(this.actionMaps); */
+  }
+
+  onUpdateStallMap($event: ActionMap): void {
+    const index = this.stallMaps.findIndex((stall_map) => stall_map.state.id == $event.state.id);
+
+    this.stallMaps[index] = $event;
+    /* console.log(this.stallMaps); */
+  }
+
+  onUpdatePolicy($event: Policy): void {
+    this.policy = $event;
+  }
+
+  onGenerateYAML(): void {
     /* === check whether inputs are wrong-format === */
 
     /* check if both states and transitions are empty */
-    if (this.states.length == 0 && this.transitions.length == 0) {
+    if (this.states.length == 1 && this.transitions.length == 0) {
       alert('No inputs. Please upload a yaml file or fill the input form');
       return;
     }   
@@ -254,10 +295,23 @@ export class LeftComponent implements OnInit {
       return;
     }
 
+    let agenda = generateAgenda(
+      this.name,
+      this.states, 
+      this.transitions,
+      this.actions,
+      this.actionMaps,
+      this.stallMaps,
+      this.policy
+    );
+    this.agendaService.setAgenda(agenda);
+    
     this.onRefreshGraph();
   }
 
   onRefreshGraph(): void {
+    /* === check (again) to determine whether or not we will refresh the graph (WARNING!: seems like the duplicate of onGenerateYAML() but in fact is used for the other purpose) === */
+
     /* check if both states and transitions are empty */
     if (this.states.length == 0 && this.transitions.length == 0) {
       return;

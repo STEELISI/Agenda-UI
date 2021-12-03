@@ -7,12 +7,20 @@
     >{{ state.name }}</option>
   </select>
   <p>TO:</p>
-  <select [(ngModel)]="transition.to" (change)="updateToState(transition)">
+  <select *ngIf="!isKickOff(transition.from); else fromkickoff" [(ngModel)]="transition.to" (change)="updateToState(transition)">
     <option 
-      *ngFor="let state of states" 
+      *ngFor="let state of states | slice:1" 
       [ngValue]="state"
     >{{ state.name }}</option>
   </select>
+  <ng-template #fromkickoff>
+    <select [(ngModel)]="transition.to" (change)="updateToState(transition)">
+      <option 
+        *ngFor="let state of getStart()" 
+        [ngValue]="state"
+      >{{ state.name }}</option>
+    </select>
+  </ng-template>
   <input 
     name="trigger"   
     type="text" 
