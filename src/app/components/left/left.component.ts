@@ -9,7 +9,7 @@ import { Transition } from '../../Transition';
 import { Action } from '../../Action';
 import { ActionMap } from '../../ActionMap';
 import { Policy } from '../../Policy';
-import { generateID } from '../../utils';
+import { generateID, deleteArrayElement } from '../../utils';
 
 import { AgendaService } from '../../services/agenda.service';
 import { GraphService } from '../../services/graph.service';
@@ -144,34 +144,21 @@ export class LeftComponent implements OnInit {
 
   onDeleteState($event: State): void {
     const index = this.states.findIndex((st) => st.id == $event.id);
-
-    if (this.states.length > 1) 
-      this.states.splice(index, 1);
-    else 
-      this.states.splice(index);
+    this.states = deleteArrayElement(this.states, index);
 
     /* remove all transitions from/to the deleted state */
     for (var i = this.transitions.length - 1; i >= 0; i--) {
       if (this.transitions[i].from.id == $event.id || this.transitions[i].to.id == $event.id) {
-        if (this.transitions.length > 1 )
-          this.transitions.splice(i, 1);
-        else
-          this.transitions.splice(i);
+        this.transitions = deleteArrayElement(this.transitions, i);
       }
     }
 
     /* remove maps in actionMaps and stallMaps */
     let act_index = this.actionMaps.findIndex((act_map) => act_map.state.id == $event.id);
-    if (this.actionMaps.length > 1) 
-      this.actionMaps.splice(act_index, 1);
-    else 
-      this.actionMaps.splice(act_index);
+    this.actionMaps = deleteArrayElement(this.actionMaps, act_index);
 
     let stl_index = this.stallMaps.findIndex((stl_map) => stl_map.state.id == $event.id);
-    if (this.stallMaps.length > 1) 
-      this.stallMaps.splice(stl_index, 1);
-    else 
-      this.stallMaps.splice(stl_index);
+    this.stallMaps = deleteArrayElement(this.stallMaps, stl_index);
 
     console.log(this.states);
     console.log(this.transitions);
@@ -209,11 +196,7 @@ export class LeftComponent implements OnInit {
 
   onDeleteTransition($event: Transition): void {
     const index = this.transitions.findIndex((ts) => ts.id == $event.id);
-
-    if (this.transitions.length > 1) 
-      this.transitions.splice(index, 1);
-    else 
-      this.transitions.splice(index);
+    this.transitions = deleteArrayElement(this.transitions, index);
     
     console.log(this.transitions);
   }
@@ -240,12 +223,20 @@ export class LeftComponent implements OnInit {
   onDeleteAction($event: Action): void {
     const index = this.actions.findIndex((act) => act.id == $event.id);
 
-    if (this.actions.length > 1) 
-      this.actions.splice(index, 1);
-    else 
-      this.actions.splice(index);
-    
+    this.actions = deleteArrayElement(this.actions, index);
     console.log(this.actions);
+
+    /* delete action in actionMaps and stallMaps */
+    this.actionMaps.forEach((action_map) => {
+      const act_index = action_map.actions.findIndex((act) => act.id == $event.id);
+      action_map.actions = deleteArrayElement(action_map.actions, act_index);
+    });
+
+    this.stallMaps.forEach((stall_map) => {
+      const act_index = stall_map.actions.findIndex((act) => act.id == $event.id);
+      stall_map.actions = deleteArrayElement(stall_map.actions, act_index);
+    });
+
   }
 
   onUpdateActionMap($event: ActionMap): void {

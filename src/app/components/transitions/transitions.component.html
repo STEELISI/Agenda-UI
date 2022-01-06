@@ -2,7 +2,7 @@
   <p>FROM:</p>
   <select [(ngModel)]="transition.from" (change)="updateFromState(transition)">
     <option 
-      *ngFor="let state of states" 
+      *ngFor="let state of getNonTerminus()" 
       [ngValue]="state"
     >{{ state.name }}</option>
   </select>

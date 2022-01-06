@@ -175,6 +175,7 @@ export function generateAgenda(
       return;
     }
     agenda.states.push({"name": st.name, "description": st.description});
+    agenda.transitions[st.name] = {};
     if (st.start) agenda.start_state_name = st.name;
     if (st.terminus) agenda.terminus_names.push(st.name);
   });
@@ -185,21 +186,23 @@ export function generateAgenda(
       return;
     }
 
-    agenda.transition_triggers.push({name: ts.trigger, description: ts.description});
-    if (!(ts.from.name in agenda.transitions)) {
-      agenda.transitions[ts.from.name] = {};
-    }
     agenda.transitions[ts.from.name][ts.trigger] = ts.to.name;
+
+    /* skip duplicate triggers */
+    if (agenda.transition_triggers.findIndex((tt) => tt.name == ts.trigger) == -1) {
+      agenda.transition_triggers.push({name: ts.trigger, description: ts.description});
+    }
   });
 
   actions.forEach((act) => {
     agenda.actions.push({
       "name": act.name, 
-      "text": act.utterance, 
+      "text": act.utterance,
       "exclusive_flag": act.flag, 
       "allowed_repeats": act.repeat
     });
   });
+  console.log(agenda.actions);
 
   actionMaps.forEach((action_map) => {
     let key = action_map.state.name;

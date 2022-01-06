@@ -82,7 +82,7 @@ export class RightComponent implements OnInit {
       return;
     }
 
-    let yamlStr = yaml.dump(this.agenda);
+    let yamlStr = yaml.dump(this.agenda, {'lineWidth': -1});
     console.log(yamlStr); 
     
     var blob = new Blob([yamlStr], {type: "yaml/plain;charset=utf-8"});

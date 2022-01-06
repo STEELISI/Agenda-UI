@@ -50,6 +50,10 @@ export class TransitionsComponent implements OnInit {
     return this.states.filter((st) => st.start == true);
   }
 
+  getNonTerminus(): State[] {
+    return this.states.filter((st) => st.terminus != true);
+  }
+
   updateFromState(transition: Transition) {
     this.updateTransitionEvent.emit(transition);
   }
