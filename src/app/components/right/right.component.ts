@@ -4,11 +4,13 @@ import { Node, Edge } from '@swimlane/ngx-graph';
 import { AgendaService } from '../../services/agenda.service';
 import { GraphService } from '../../services/graph.service';
 
+import * as JSZip from 'jszip';
 import * as yaml from 'js-yaml';
 
 import { Agenda } from '../../Agenda';
 import { State } from '../../State';
 import { Transition } from '../../Transition';
+import { generateEmptyTrainingDirSh } from '../../utils';
 
 @Component({
   selector: 'app-right',
@@ -24,6 +26,11 @@ export class RightComponent implements OnInit {
 
   agenda = {} as Agenda;
   agendaStr!: string;
+
+  readme: string = `Instructions
+1) Move <agenda_name>.yaml file to your agenda directory
+2) Move <agenda_name> folder to your training data directory
+3) Add training utterances to the empty trigger files`;
 
   @Output() refreshBoardEvent: EventEmitter<boolean> = new EventEmitter();
 
@@ -84,9 +91,29 @@ export class RightComponent implements OnInit {
 
     let yamlStr = yaml.dump(this.agenda, {'lineWidth': -1});
     console.log(yamlStr); 
-    
-    var blob = new Blob([yamlStr], {type: "yaml/plain;charset=utf-8"});
-    saveAs(blob, "agenda.yaml");
+
+    const agenda_name: string = this.agenda.name;
+    //console.log(agenda_name);
+    const trigger_list: string[] = [];
+    this.agenda.transition_triggers.forEach((tg) => {
+      trigger_list.push(tg.name);
+    });
+    const triggers: string = trigger_list.join(' ');
+    //console.log(triggers);
+
+    const sh = generateEmptyTrainingDirSh(agenda_name, triggers);
+    console.log(sh);
+
+    var zip = new JSZip();
+    //zip.file("README.txt", this.readme);
+    zip.file(this.agenda.name + ".yaml", yamlStr);
+    zip.file("generate_empty_training_dir.sh", sh);
+
+    zip.generateAsync({type: "blob"})
+    .then(function(content){
+      saveAs(content, "agenda.zip");
+    });
+
   }
 
 }

@@ -50,7 +50,7 @@ export class DrawingboardComponent implements OnInit, OnChanges {
     }
 
     clearTimeout(this.timeoutID);
-    this.timeoutID = setTimeout(() => {this.resizableBoardEvent.emit(true)}, 500);
+    this.timeoutID = window.setTimeout(() => {this.resizableBoardEvent.emit(true)}, 500);
   }
 
 }
