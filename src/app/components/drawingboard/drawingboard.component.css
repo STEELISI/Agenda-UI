@@ -1,11 +1,8 @@
-div {
+.resizable-board {
   border: 1px solid black;
   width: 100%;
-}
-
-.resizable-board {
-  min-height: 200px;
+  min-height: 300px;
   resize: vertical;
-  overflow: auto;
-  max-height: 555px;
+  overflow: scroll;
+  max-height: 1000px;
 }

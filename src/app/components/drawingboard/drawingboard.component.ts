@@ -16,7 +16,9 @@ export class DrawingboardComponent implements OnInit, OnChanges {
 
   @Output() resizableBoardEvent: EventEmitter<boolean> = new EventEmitter();
 
-  resizeCounter: number = 0;
+  width: number = 0;
+  height: number = 0;
+  view: [number, number] = [this.width, this.height]
   timeoutID: number = 0; 
 
   zoomToFit$: Subject<boolean> = new Subject();
@@ -35,16 +37,21 @@ export class DrawingboardComponent implements OnInit, OnChanges {
 
     const boardElement = document.getElementById("board");
     if (boardElement) {
-      boardElement.style.height = "200px";
+      boardElement.style.height = "400px";
     }
 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.zoomToFit$.next(true)
+    this.zoomToFit$.next(true);
   }
 
   onResizableBoard($event: ResizedEvent): void {
+    this.width = $event.newRect.width;
+    this.height = $event.newRect.height;
+    this.view = [this.width - 11, this.height - 11];
+    console.log(this.view)
+
     if (this.nodes.length == 0 && this.links.length == 0) {
       return;
     }
