@@ -31,6 +31,7 @@ else
 fi
 
 yaml_file=${agenda_name}.yaml
+echo "copy $yaml_file file to $agenda_path directory";
 cp $yaml_file $agenda_path
 
 nli_path=$1/nli_premises/${agenda_name};
