@@ -95,6 +95,9 @@ export class RightComponent implements OnInit {
     const agenda_name: string = this.agenda.name;
     //console.log(agenda_name);
     const trigger_list: string[] = [];
+    this.agenda.kickoff_triggers.forEach((tg) => {
+      trigger_list.push(tg.name);
+    });
     this.agenda.transition_triggers.forEach((tg) => {
       trigger_list.push(tg.name);
     });
