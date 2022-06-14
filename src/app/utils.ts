@@ -20,7 +20,7 @@ if [ "$1" == "" ]; then
 fi
 
 echo "PATH: $1";
-echo "AGENDA: get_contact_info";
+echo "AGENDA: ${agenda_name}";
 
 agenda_path=$1/agendas/
 if [ -d "$agenda_path" ]; then
@@ -30,12 +30,12 @@ else
   echo "$agenda_path directory is created";
 fi
 
-yaml_file=get_contact_info.yaml
+yaml_file=${agenda_name}.yaml
 echo "copy $yaml_file file to $agenda_path directory";
 cp $yaml_file $agenda_path
 
-nli_path=$1/nli_premises/get_contact_info;
-nlu_path=$1/nlu_training_data/get_contact_info;
+nli_path=$1/nli_premises/${agenda_name};
+nlu_path=$1/nlu_training_data/${agenda_name};
 
 echo "NLI_PATH: $nli_path"
 echo "NLU_PATH: $nlu_path"
@@ -54,7 +54,7 @@ else
   echo "$nlu_path directory directory is created";
 fi
 
-triggers="name yes_name no_name yes_phone_number no_phone_number"
+triggers="${triggers}"
 
 for t in $triggers;
 do
@@ -65,7 +65,7 @@ do
     touch $nli_trigger_file;
     echo "$nli_trigger_file file is created";
   fi
-  
+
   nlu_trigger_dir=$nlu_path/$t
   if [ -d "$nlu_trigger_dir" ]; then
     echo "$nlu_trigger_dir directory already existed";
@@ -79,22 +79,39 @@ do
   fi
 done
 
-
 for FILE in "$nli_path"/*; 
   do
-  file=\${FILE##*/}
-  newFile=\${file%%.txt*}
-  echo "$newFile"
-  [[ $triggers =~ "(^|[[:space:]])"$newFile"($|[[:space:]])" ]] && echo 'yes' || rm $FILE
+  file_name=\${FILE##*/}
+  trigger=\${file_name%%.txt*}
+  inside="false"
+  for item in $triggers;
+  do
+    if [ "$item" == "$trigger" ]; then
+      inside="true"
+    fi
+  done
+  if [ "$inside" == "false"  ]; then
+    echo "We remove not required File $FILE"
+    rm $FILE
+  fi
 done
 
 for FOLDER in "$nlu_path"/*; 
   do
   folder_name=\${FOLDER##*/}
-  echo "file is $folder_name"
-  [[ $triggers =~ "(^|[[:space:]])"$folder_name"($|[[:space:]])" ]] && echo 'yes' || rm -r $FOLDER
-done
-echo "END"`;
+  inside="false"
+  for item in $triggers;
+  do
+    if [ "$item" == "$folder_name" ]; then
+      inside="true"
+    fi
+  done
+  if [ "$inside" == "false"  ]; then
+    echo "We remove not required Folder $FOLDER"
+    rm -r $FOLDER
+  fi
+done`;
 
   return sh_script;
+
 }
