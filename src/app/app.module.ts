@@ -16,6 +16,7 @@ import { TransitionsComponent } from './components/transitions/transitions.compo
 import { DrawingboardComponent } from './components/drawingboard/drawingboard.component';
 import { ActionsComponent } from './components/actions/actions.component';
 import { MapsComponent } from './components/maps/maps.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MapsComponent } from './components/maps/maps.component';
     AngularResizeEventModule,
     NgxGraphModule,
     AngularSplitModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

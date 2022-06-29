@@ -11,6 +11,7 @@ import { Agenda } from '../../Agenda';
 import { State } from '../../State';
 import { Transition } from '../../Transition';
 import { generateEmptyTrainingDirSh } from '../../utils';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-right',
@@ -18,6 +19,7 @@ import { generateEmptyTrainingDirSh } from '../../utils';
   styleUrls: ['./right.component.css']
 })
 export class RightComponent implements OnInit {
+  closeResult = '';
   states: State[] = [];
   transitions: Transition[] = [];
 
@@ -34,10 +36,31 @@ export class RightComponent implements OnInit {
 
   @Output() refreshBoardEvent: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private agendaService: AgendaService, private graphService: GraphService) {
+  constructor(private agendaService: AgendaService, 
+    private graphService: GraphService,
+    private modalService: NgbModal) {
     this.agendaService.getAgenda().subscribe((agenda) => this.onUpdateAgenda(agenda));
     this.graphService.getStates().subscribe((states) => this.onUpdateNode(states));
     this.graphService.getTransitions().subscribe((transitions) => this.onUpdateEdge(transitions));
+  }
+
+  open(content) {
+    this.modalService.open(content,
+    {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with : $(result)`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   ngOnInit(): void {
@@ -88,6 +111,9 @@ export class RightComponent implements OnInit {
       alert("Agenda is empty. Please fill out the form");
       return;
     }
+
+    /* console.log(this.agendaStr); */
+    /* TODO open dialog to create nli and nlu training per utils */
 
     let yamlStr = yaml.dump(this.agenda, {'lineWidth': -1});
     console.log(yamlStr); 
