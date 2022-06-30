@@ -77,6 +77,39 @@ do
     touch $nlu_trigger_dir/NOT$t.txt;
     echo "$nlu_trigger_dir/NOT$t.txt file is created";
   fi
+done
+
+for FILE in "$nli_path"/*; 
+  do
+  file_name=\${FILE##*/}
+  trigger=\${file_name%%.txt*}
+  inside="false"
+  for item in $triggers;
+  do
+    if [ "$item" == "$trigger" ]; then
+      inside="true"
+    fi
+  done
+  if [ "$inside" == "false"  ]; then
+    echo "We remove not required File $FILE"
+    rm $FILE
+  fi
+done
+
+for FOLDER in "$nlu_path"/*; 
+  do
+  folder_name=\${FOLDER##*/}
+  inside="false"
+  for item in $triggers;
+  do
+    if [ "$item" == "$folder_name" ]; then
+      inside="true"
+    fi
+  done
+  if [ "$inside" == "false"  ]; then
+    echo "We remove not required Folder $FOLDER"
+    rm -r $FOLDER
+  fi
 done`;
 
   return sh_script;
