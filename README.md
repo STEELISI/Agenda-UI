@@ -13,6 +13,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+When running on Ubuntu, `iptables` firewall may require custom entries to allow access to the web app.
+
 SSL settings (requires certificate and key files):
 ```
 ng serve --ssl true \
