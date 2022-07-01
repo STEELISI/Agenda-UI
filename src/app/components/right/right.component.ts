@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import { Node, Edge } from '@swimlane/ngx-graph';
 import { AgendaService } from '../../services/agenda.service';
 import { GraphService } from '../../services/graph.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import * as JSZip from 'jszip';
 import * as yaml from 'js-yaml';
@@ -11,13 +12,14 @@ import { Agenda } from '../../Agenda';
 import { State } from '../../State';
 import { Transition } from '../../Transition';
 import { generateEmptyTrainingDirSh } from '../../utils';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-right',
   templateUrl: './right.component.html',
   styleUrls: ['./right.component.css']
 })
+
 export class RightComponent implements OnInit {
   closeResult = '';
   states: State[] = [];
@@ -38,7 +40,8 @@ export class RightComponent implements OnInit {
 
   constructor(private agendaService: AgendaService, 
     private graphService: GraphService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private http: HttpClient) {
     this.agendaService.getAgenda().subscribe((agenda) => this.onUpdateAgenda(agenda));
     this.graphService.getStates().subscribe((states) => this.onUpdateNode(states));
     this.graphService.getTransitions().subscribe((transitions) => this.onUpdateEdge(transitions));
@@ -67,12 +70,18 @@ export class RightComponent implements OnInit {
       this.agenda.transition_triggers.forEach((tg) => {
         trigger_list.push(tg.name);
       });
-      const triggers: string = trigger_list.join(' ');
+      const triggers: string = trigger_list.join(',');
       console.log(triggers);
       const sh = generateEmptyTrainingDirSh(agenda_name, triggers);
       console.log(sh);
 
-
+      let headers = new HttpHeaders({'TRIGGERS': triggers});
+      let options = { headers: headers };
+      this.http.post('http://localhost:3000', null, options)
+          .subscribe(
+            res => { console.log(res); },
+            err => { console.log(err.message); }
+          );
 
       console.log('todo: add fields...');
 
