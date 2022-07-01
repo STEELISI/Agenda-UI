@@ -77,7 +77,7 @@ export class RightComponent implements OnInit {
 
       let headers = new HttpHeaders({'TRIGGERS': triggers});
       let options = { headers: headers };
-      this.http.post('http://localhost:3000', null, options)
+      this.http.post('https://piranha-agenda.isi.edu:4400', null, options)
           .subscribe(
             res => { console.log(res); },
             err => { console.log(err.message); }
