@@ -47,9 +47,38 @@ export class RightComponent implements OnInit {
   open(content) {
     this.modalService.open(content,
     {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with : $(result)`;
+      this.closeResult = `Closed with: ${result}`;
+      console.log(this.closeResult);
+
+      if (!this.agendaStr) {
+        alert("Agenda is empty. Please fill out the form");
+        return;
+      }
+
+      console.log(this.agendaStr);
+      let yamlStr = yaml.dump(this.agenda, {'lineWidth': -1});
+      console.log(yamlStr);
+      const agenda_name: string = this.agenda.name;
+      console.log(agenda_name);
+      const trigger_list: string[] = [];
+      this.agenda.kickoff_triggers.forEach((tg) => {
+        trigger_list.push(tg.name);
+      });
+      this.agenda.transition_triggers.forEach((tg) => {
+        trigger_list.push(tg.name);
+      });
+      const triggers: string = trigger_list.join(' ');
+      console.log(triggers);
+      const sh = generateEmptyTrainingDirSh(agenda_name, triggers);
+      console.log(sh);
+
+
+
+      console.log('todo: add fields...');
+
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      console.log(this.closeResult);
     });
   }
 
@@ -111,9 +140,6 @@ export class RightComponent implements OnInit {
       alert("Agenda is empty. Please fill out the form");
       return;
     }
-
-    /* console.log(this.agendaStr); */
-    /* TODO open dialog to create nli and nlu training per utils */
 
     let yamlStr = yaml.dump(this.agenda, {'lineWidth': -1});
     console.log(yamlStr); 
