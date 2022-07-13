@@ -23,10 +23,9 @@
     </button>
   </div>
   <div class="modal-body">
-    <form>
-      <div class="form-group">
-        <label>Triggers</label>
-      </div>
+    <form [formGroup]='trainingDataFormGroup' class="form-group">
+      <div class="trigger-body">{{ triggerStr }}</div>
+      <input placholder="Enter training data">
     </form>
   </div>
   <div class="modal-footer">

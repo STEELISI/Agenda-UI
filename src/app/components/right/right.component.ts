@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { Node, Edge } from '@swimlane/ngx-graph';
 import { AgendaService } from '../../services/agenda.service';
@@ -21,7 +22,10 @@ import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 })
 
 export class RightComponent implements OnInit {
+  trainingDataFormGroup: FormGroup;
+  allTriggers: FormArray;
   closeResult = '';
+  triggerStr = '';
   states: State[] = [];
   transitions: Transition[] = [];
 
@@ -41,13 +45,37 @@ export class RightComponent implements OnInit {
   constructor(private agendaService: AgendaService, 
     private graphService: GraphService,
     private modalService: NgbModal,
-    private http: HttpClient) {
+    private http: HttpClient,
+    private formBuilder: FormBuilder) {
     this.agendaService.getAgenda().subscribe((agenda) => this.onUpdateAgenda(agenda));
     this.graphService.getStates().subscribe((states) => this.onUpdateNode(states));
     this.graphService.getTransitions().subscribe((transitions) => this.onUpdateEdge(transitions));
+    this.trainingDataFormGroup = this.formBuilder.group({});
+    this.allTriggers = this.formBuilder.array([]);
   }
 
   open(content) {
+    this.triggerStr = 'Agenda: ' + this.agenda.name;
+
+    const triggerArray: string[] = [];
+    this.agenda.kickoff_triggers.forEach((tg) => {
+      triggerArray.push(tg.name);
+    });
+    this.agenda.transition_triggers.forEach((tg) => {
+      triggerArray.push(tg.name);
+    });
+
+    triggerArray.forEach(trigger=>{
+      this.trainingDataFormGroup.addControl('allTriggers', this.allTriggers);
+      this.trainingDataFormGroup.addControl(trigger, this.formBuilder.control({trigger}));
+      console.log(trigger);
+    });
+
+    this.allTriggers.push(new FormControl('test'));
+    this.allTriggers.push(this.formBuilder.control({name: 'abc', text: '123'}));
+
+    this.triggerStr = this.triggerStr + ' [not working]';
+
     this.modalService.open(content,
     {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -108,7 +136,7 @@ export class RightComponent implements OnInit {
   onUpdateAgenda(agenda: Agenda): void {
     this.agenda = agenda;
     this.agendaStr = JSON.stringify(this.agenda, null, 4);
-    /* console.log(this.agendaStr); */ 
+    this.triggerStr = 'Put triggers here';
   }
  
   onUpdateNode(states: State[]): void {
