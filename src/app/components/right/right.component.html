@@ -27,7 +27,7 @@
     <form class="formStyle" [formGroup]="TrainingDataForm" >
       <div *ngFor="let data of trainingFormData" >
         <div>{{ data.label }}</div>
-        <input type="text" formControlName="{{ data.label }}" >
+        <textarea type="text" cols="40" rows="5" formControlName="{{ data.label }}" ></textarea>
       </div>
     </form>
     <div>{{ triggerStr }}</div>

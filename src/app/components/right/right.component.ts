@@ -87,6 +87,10 @@ export class RightComponent implements OnInit {
         return;
       }
 
+      let trainingJson = JSON.stringify(this.TrainingDataForm.value, null, 0);
+      console.log('trainingJson:');
+      console.log(trainingJson);
+
       console.log(this.agendaStr);
       let yamlStr = yaml.dump(this.agenda, {'lineWidth': -1});
       console.log(yamlStr);
@@ -104,16 +108,16 @@ export class RightComponent implements OnInit {
       const sh = generateEmptyTrainingDirSh(agenda_name, triggers);
       console.log(sh);
 
-      let headers = new HttpHeaders({'TRIGGERS': triggers});
+      let headers = new HttpHeaders()
+        .set('TRIGGERS', triggers)
+        .set('TRAINING', trainingJson);
+
       let options = { headers: headers };
       this.http.post('https://piranha-agenda.isi.edu:4400', null, options)
           .subscribe(
             res => { console.log(res); },
             err => { console.log(err.message); }
           );
-
-      console.log('todo: add fields...');
-
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       console.log(this.closeResult);
@@ -137,7 +141,6 @@ export class RightComponent implements OnInit {
   onUpdateAgenda(agenda: Agenda): void {
     this.agenda = agenda;
     this.agendaStr = JSON.stringify(this.agenda, null, 4);
-    this.triggerStr = 'Put triggers here';
   }
  
   onUpdateNode(states: State[]): void {
