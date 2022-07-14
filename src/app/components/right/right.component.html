@@ -27,11 +27,9 @@
     <form class="formStyle" [formGroup]="TrainingDataForm" >
       <div *ngFor="let data of trainingFormData" >
         <div>{{ data.label }}</div>
-        <textarea type="text" cols="40" rows="5" formControlName="{{ data.label }}" ></textarea>
+        <textarea type="text" cols="84" rows="2" formControlName="{{ data.label }}" ></textarea>
       </div>
     </form>
-    <div>{{ triggerStr }}</div>
-    <div>{{ TrainingDataForm.value | json}}</div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">

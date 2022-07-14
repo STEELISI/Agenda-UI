@@ -32,3 +32,9 @@ body {
   margin: 6px 0;
 }
 
+.training-modal {
+}
+
+.modal-content {
+  width: 700px;
+}
