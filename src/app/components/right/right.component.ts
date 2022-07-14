@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { Node, Edge } from '@swimlane/ngx-graph';
 import { AgendaService } from '../../services/agenda.service';
@@ -22,10 +22,11 @@ import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 })
 
 export class RightComponent implements OnInit {
-  trainingDataFormGroup: FormGroup;
-  allTriggers: FormArray;
+  trainingFormData : any[] = []; 
+  TrainingDataForm: FormGroup;
   closeResult = '';
   triggerStr = '';
+  agendaName = '';
   states: State[] = [];
   transitions: Transition[] = [];
 
@@ -45,18 +46,22 @@ export class RightComponent implements OnInit {
   constructor(private agendaService: AgendaService, 
     private graphService: GraphService,
     private modalService: NgbModal,
-    private http: HttpClient,
-    private formBuilder: FormBuilder) {
+    private http: HttpClient) {
     this.agendaService.getAgenda().subscribe((agenda) => this.onUpdateAgenda(agenda));
     this.graphService.getStates().subscribe((states) => this.onUpdateNode(states));
     this.graphService.getTransitions().subscribe((transitions) => this.onUpdateEdge(transitions));
-    this.trainingDataFormGroup = this.formBuilder.group({});
-    this.allTriggers = this.formBuilder.array([]);
+    this.TrainingDataForm = new FormGroup({});
+  }
+
+  setSettings(formData){
+    let form = {};
+    for (let i=0; i<formData.length; i++){
+      form[formData[i].label] = new FormControl('');
+    }
+    this.TrainingDataForm = new FormGroup(form);    
   }
 
   open(content) {
-    this.triggerStr = 'Agenda: ' + this.agenda.name;
-
     const triggerArray: string[] = [];
     this.agenda.kickoff_triggers.forEach((tg) => {
       triggerArray.push(tg.name);
@@ -66,15 +71,11 @@ export class RightComponent implements OnInit {
     });
 
     triggerArray.forEach(trigger=>{
-      this.trainingDataFormGroup.addControl('allTriggers', this.allTriggers);
-      this.trainingDataFormGroup.addControl(trigger, this.formBuilder.control({trigger}));
       console.log(trigger);
+      this.trainingFormData.push({"label": trigger});
     });
 
-    this.allTriggers.push(new FormControl('test'));
-    this.allTriggers.push(this.formBuilder.control({name: 'abc', text: '123'}));
-
-    this.triggerStr = this.triggerStr + ' [not working]';
+    this.setSettings(this.trainingFormData);
 
     this.modalService.open(content,
     {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
