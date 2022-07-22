@@ -1,8 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { Node, Edge } from '@swimlane/ngx-graph';
 import { AgendaService } from '../../services/agenda.service';
 import { GraphService } from '../../services/graph.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import * as JSZip from 'jszip';
 import * as yaml from 'js-yaml';
@@ -11,13 +13,20 @@ import { Agenda } from '../../Agenda';
 import { State } from '../../State';
 import { Transition } from '../../Transition';
 import { generateEmptyTrainingDirSh } from '../../utils';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-right',
   templateUrl: './right.component.html',
   styleUrls: ['./right.component.css']
 })
+
 export class RightComponent implements OnInit {
+  trainingFormData : any[] = [];
+  TrainingDataForm: FormGroup;
+  closeResult = '';
+  triggerStr = '';
+  agendaName = '';
   states: State[] = [];
   transitions: Transition[] = [];
 
@@ -34,10 +43,101 @@ export class RightComponent implements OnInit {
 
   @Output() refreshBoardEvent: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private agendaService: AgendaService, private graphService: GraphService) {
+  constructor(private agendaService: AgendaService,
+    private graphService: GraphService,
+    private modalService: NgbModal,
+    private http: HttpClient) {
     this.agendaService.getAgenda().subscribe((agenda) => this.onUpdateAgenda(agenda));
     this.graphService.getStates().subscribe((states) => this.onUpdateNode(states));
     this.graphService.getTransitions().subscribe((transitions) => this.onUpdateEdge(transitions));
+    this.TrainingDataForm = new FormGroup({});
+  }
+
+  setSettings(formData){
+    let form = {};
+    for (let i=0; i<formData.length; i++){
+      form[formData[i].label] = new FormControl('');
+    }
+    this.TrainingDataForm = new FormGroup(form);
+  }
+
+  open(content) {
+    if (!this.agendaStr) {
+        alert("✖ Agenda is empty. Please fill out the form.");
+        return;
+    }
+
+    const triggerArray: string[] = [];
+    this.agenda.kickoff_triggers.forEach((tg) => {
+      triggerArray.push(tg.name);
+    });
+    this.agenda.transition_triggers.forEach((tg) => {
+      triggerArray.push(tg.name);
+    });
+
+    triggerArray.forEach(trigger=>{
+      this.trainingFormData.push({"label": trigger + '_nli'});
+      this.trainingFormData.push({"label": trigger + '_nlu'});
+      this.trainingFormData.push({"label": trigger + '_nlu_not'});
+    });
+
+    this.setSettings(this.trainingFormData);
+
+    this.modalService.open(content,
+    {ariaLabelledBy: 'modal-basic-title', windowClass: 'training-modal'})
+    .result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      console.log(this.closeResult);
+
+      let trainingJson = JSON.stringify(this.TrainingDataForm.value, null, 0);
+      console.log(trainingJson)
+      let agendaJson = JSON.stringify(this.agenda, null, 0);
+      console.log(agendaJson);
+      const agenda_name: string = this.agenda.name;
+      console.log(agenda_name);
+      const trigger_list: string[] = [];
+      this.agenda.kickoff_triggers.forEach((tg) => {
+        trigger_list.push(tg.name);
+      });
+      this.agenda.transition_triggers.forEach((tg) => {
+        trigger_list.push(tg.name);
+      });
+      const triggers: string = trigger_list.join(',');
+      console.log(triggers);
+      const sh = generateEmptyTrainingDirSh(agenda_name, triggers);
+      console.log(sh);
+
+      let headers = new HttpHeaders()
+        .set('AGENDA', agendaJson)
+        .set('TRAINING', trainingJson)
+        .set('TRIGGERS', triggers);
+
+      let options = { headers: headers };
+      this.http.post('https://piranha-agenda.isi.edu:4400', null, options)
+          .subscribe(
+            res => {
+              console.log(res);
+              alert("✓ Save succeeded.");
+            },
+            err => {
+              console.log(err.message);
+              alert("✖ Save failed.  Please contact your admin.");
+            }
+          );
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      console.log(this.closeResult);
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   ngOnInit(): void {
@@ -47,9 +147,8 @@ export class RightComponent implements OnInit {
   onUpdateAgenda(agenda: Agenda): void {
     this.agenda = agenda;
     this.agendaStr = JSON.stringify(this.agenda, null, 4);
-    /* console.log(this.agendaStr); */ 
   }
- 
+
   onUpdateNode(states: State[]): void {
     let nodes: Node[] = [];
     states.forEach((st) => {
@@ -82,7 +181,7 @@ export class RightComponent implements OnInit {
   onRefreshBoard(): void {
     this.refreshBoardEvent.emit(true);
   }
-  
+
   onSubmit(): void {
     if (!this.agendaStr) {
       alert("Agenda is empty. Please fill out the form");
@@ -90,10 +189,10 @@ export class RightComponent implements OnInit {
     }
 
     let yamlStr = yaml.dump(this.agenda, {'lineWidth': -1});
-    console.log(yamlStr); 
+    console.log(yamlStr);
 
     const agenda_name: string = this.agenda.name;
-    //console.log(agenda_name);
+
     const trigger_list: string[] = [];
     this.agenda.kickoff_triggers.forEach((tg) => {
       trigger_list.push(tg.name);
@@ -102,7 +201,6 @@ export class RightComponent implements OnInit {
       trigger_list.push(tg.name);
     });
     const triggers: string = trigger_list.join(' ');
-    //console.log(triggers);
 
     const sh = generateEmptyTrainingDirSh(agenda_name, triggers);
     console.log(sh);

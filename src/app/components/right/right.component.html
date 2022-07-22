@@ -15,8 +15,35 @@
 <div *ngIf="agendaStr; else emptyagenda" class="agenda-content">{{ agendaStr }}</div>
 <ng-template #emptyagenda>...</ng-template>
 
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Training Data</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">✖</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>Agenda: <strong>{{ agenda.name }}</strong></div>
+    <form class="formStyle" [formGroup]="TrainingDataForm" >
+      <div *ngFor="let data of trainingFormData" >
+        <div>{{ data.label }}</div>
+        <textarea type="text" cols="84" rows="2" formControlName="{{ data.label }}" ></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">
+      Save
+    </button>
+  </div>
+</ng-template>
+
 <div class="buttons">
   <button 
     class="save-button"
     (click)="onSubmit()">Download</button>
+  <span><hr/></span>
+  <button class="btn btn-lg btn-outline-primary" (click)="open(content)">
+    Create Training Data
+  </button>
 </div>

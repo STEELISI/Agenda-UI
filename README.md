@@ -9,15 +9,29 @@ $ npm --version
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.7.
 
+```
+$ npm install .
+$ ng version
+Angular CLI: 12.2.17
+Node: 14.19.3
+Package Manager: npm 6.14.17
+OS: darwin x64
+Angular: 12.2.8
+```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+When running on Ubuntu, `iptables` firewall may require custom entries to allow access to the web app.
 
 SSL settings (requires certificate and key files):
 ```
 ng serve --ssl true \
     --ssl-cert "/opt/PIRANHA/Agenda-UI/.ssl/dummy.cer" \
-    --ssl-key "/opt/PIRANHA/Agenda-UI/.ssl/dummy.key"
+    --ssl-key "/opt/PIRANHA/Agenda-UI/.ssl/dummy.key" \
+    --host ""piranha-agenda.isi.edu" \
+    --port 4200
 ```
 ## Code scaffolding
 

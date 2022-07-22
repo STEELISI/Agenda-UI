@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AngularResizeEventModule } from 'angular-resize-event';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
@@ -16,6 +17,7 @@ import { TransitionsComponent } from './components/transitions/transitions.compo
 import { DrawingboardComponent } from './components/drawingboard/drawingboard.component';
 import { ActionsComponent } from './components/actions/actions.component';
 import { MapsComponent } from './components/maps/maps.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { MapsComponent } from './components/maps/maps.component';
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
@@ -37,6 +41,7 @@ import { MapsComponent } from './components/maps/maps.component';
     AngularResizeEventModule,
     NgxGraphModule,
     AngularSplitModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
