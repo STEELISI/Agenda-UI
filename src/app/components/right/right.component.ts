@@ -62,6 +62,11 @@ export class RightComponent implements OnInit {
   }
 
   open(content) {
+    if (!this.agendaStr) {
+        alert("✖ Agenda is empty. Please fill out the form.");
+        return;
+    }
+
     const triggerArray: string[] = [];
     this.agenda.kickoff_triggers.forEach((tg) => {
       triggerArray.push(tg.name);
@@ -83,11 +88,6 @@ export class RightComponent implements OnInit {
     .result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       console.log(this.closeResult);
-
-      if (!this.agendaStr) {
-          alert("✖ Agenda is empty. Please fill out the form.");
-          return;
-      }
 
       let trainingJson = JSON.stringify(this.TrainingDataForm.value, null, 0);
       console.log(trainingJson)
@@ -113,7 +113,7 @@ export class RightComponent implements OnInit {
         .set('TRIGGERS', triggers);
 
       let options = { headers: headers };
-      this.http.post('http://localhost:3000', null, options)
+      this.http.post('https://piranha-agenda.isi.edu:4400', null, options)
           .subscribe(
             res => {
               console.log(res);
