@@ -2,8 +2,8 @@
   <div class="map-block">
     <h4 style="text-align: center; padding-bottom: 6px;">Action Map</h4>
     <div class="input-border">
-      <div *ngFor="let actionMap of actionMaps" class="form-control">
-        <p style="padding-bottom: 6px">{{ actionMap.state.name }}</p>
+      <div *ngFor="let actionMap of actionMaps">
+        <p style="padding-bottom: 0%">{{ actionMap.state.name }}</p>
         <div id="'action-' + {{ actionMap.state.name }}" class="dropdown-check-list" #dropdownAction>
           <span class="anchor" 
             (click)="showActionList(dropdownAction.id)"
@@ -39,8 +39,8 @@
   <div class="map-block">
     <h4 style="text-align: center; padding-bottom: 6px;">Stall Action Map</h4>
     <div class="input-border">
-      <div *ngFor="let stallMap of stallMaps" class="form-control">
-        <p style="padding-bottom: 6px">{{ stallMap.state.name }}</p>
+      <div *ngFor="let stallMap of stallMaps">
+        <p style="padding-bottom: 0%">{{ stallMap.state.name }}</p>
         <div id="'stall-' + {{ stallMap.state.name }}" class="dropdown-check-list" #dropdownStall>
           <span class="anchor" 
             (click)="showActionList(dropdownStall.id)"

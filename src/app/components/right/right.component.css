@@ -11,22 +11,31 @@
   white-space: pre-wrap;
 }
 
-.save-button {
-  background-color: #e7e7e7; /* Gray */
-  border: 2px solid grey;
-  border-radius: 12px;
+.buttons button{
+  display: inline-block;
+  background: #e7e7e7; /* Gray */
   color: black;
+
   padding: 6px 12px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  margin: 2px 5px;
+
+  font-size: 12px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
-  font-size: 12px;
-  margin: 2px 1px;
-  transition-duration: 0.4s;
-  cursor: pointer;
+  transition-duration: 0.5s, 0.8s;
+  transition-property: background, box-shadow;
 }
 
-.save-button:hover {
+/* .save-button:hover {
   background-color: #bebebe;
   color: black;
+} */
+
+.buttons button:hover
+{
+  cursor: pointer;
+  background: #1e90ff;
+  box-shadow: 3px 5px 10px #87cefa;
 }
